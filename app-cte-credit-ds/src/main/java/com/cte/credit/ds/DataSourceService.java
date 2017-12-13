@@ -131,11 +131,4 @@ public class DataSourceService extends BaseDataSourceService implements IDataSou
 		logger.info("{} 总计耗时:{}", prefix, new Date().getTime() - start +" ms");
 		return rets;
 	}
-
-	private boolean checkDs(String dsid) {
-		Integer count = daoService.getJdbcTemplate().queryForObject(
-				"select count(1) count from cpdb_mk.t_etl_datasource_idname where ds_id = ?", 
-				new Object[]{dsid}, Integer.class);
-		return count!=null && count > 0;
-	}
 }

@@ -2,7 +2,6 @@ package com.cte.credit.ds;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cte.credit.api.Conts;
-import com.cte.credit.api.dto.DataSource;
 import com.cte.credit.api.enums.CRSStatusEnum;
 import com.cte.credit.api.exception.ServiceException;
 import com.cte.credit.common.annotation.DataSourceClass;
@@ -15,32 +14,20 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 public class BaseDataSourceService {
 	private final  Logger logger = LoggerFactory.getLogger(BaseDataSourceService.class);
-	private final String ds_error_warn_sms = "【预警提示】数据源区间异常次数达到指定阈值，熔断保护启用，已暂时进行关闭处理，后续请及时跟踪和分析!";
-	private final String ds_error_on_sms = "【平台提示】数据源动态调整已启用！";
-	public final int templateId = 19714437;
+
 	private static Map<String,Object> implObjectMap = null;
 
 	public final String  tail_errorlist="_errorlist";
 	public final String  tail_send_time="_sendtime";
 	
-	public boolean isfuseOff(final String trade_id,final DataSource ds) throws ServiceException{
-		final String prefix = trade_id; //流水号标识
-		final String ds_id = ds.getId();
-		final String ds_name = ds.getName();
-		
-		return false;
-	}
+
 	/**从配置参数字符串（如dsid1:300,dsid2:50,*:10）取得对应ds的熔断阈值，默认10*/
 	protected static int getDsErrorConfigMax(String numstring ,String dsid){
 		//numstring="dsid1:300,dsid2:50,*:10";
@@ -106,7 +93,6 @@ public class BaseDataSourceService {
 	}
 	
 	private final String start_suffix  ="mock_resp_";
-	private final String all_suffix  ="*";
 	/**
 	 * 是否启用mock
 	 * @param ds_id
@@ -163,7 +149,7 @@ public class BaseDataSourceService {
 				}
 			}
 		}
-//		logger.warn("数据源重定向策略返回数据{} {}",dsid,next_dsid);
+		logger.warn("数据源重定向策略返回数据{} {}",dsid,next_dsid);
 		return next_dsid;
 	}
 }

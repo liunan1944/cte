@@ -1,25 +1,19 @@
 package com.cte.credit.ds;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cte.credit.api.Conts;
 import com.cte.credit.api.dto.DataSource;
-import com.cte.credit.api.dto.Param;
 import com.cte.credit.api.enums.CRSStatusEnum;
 import com.cte.credit.common.dao.DaoService;
 import com.cte.credit.common.util.ParamUtil;
 import com.cte.credit.common.util.StringUtil;
-
-
-
 
 public class BaseDataSourceRequestor {
 	private final  Logger logger = LoggerFactory.getLogger(BaseDataSourceRequestor.class);
