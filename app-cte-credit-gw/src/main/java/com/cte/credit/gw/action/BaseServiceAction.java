@@ -122,14 +122,14 @@ public class BaseServiceAction {
 	 */
 	public ProductDto encodeRepStr(String trade_id,Account account,String reqStr) 
 			throws DecoderException, WandaCryptoAESException{
-		logger.info("{} 解密账户信息：{}",trade_id,JSON.toJSONString(account));
-		logger.info("{} 加密信息：{}",trade_id,reqStr);
+		logger.info("{} 解密入参信息开始...",trade_id);
 		WandaAES wandaAES = new WandaAES(Hex.decodeHex(account.getApi_key().toCharArray()));
 		byte[] encryptAESReqByte = Base64Utils.decodeFromString(reqStr);
         byte[] reqByte = wandaAES.decrypt(encryptAESReqByte);
         String decodeStr = new String(reqByte);
         JSONObject rsponse = (JSONObject) JSONObject.fromObject(decodeStr);
         ProductDto prod = (ProductDto)JSONObject.toBean(rsponse, ProductDto.class);
+        logger.info("{} 解密入参信息完成",trade_id);
         return prod;
 	}
 	/**

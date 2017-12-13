@@ -15,6 +15,9 @@ import com.cte.credit.common.dao.DaoService;
 import com.cte.credit.common.util.ParamUtil;
 import com.cte.credit.common.util.StringUtil;
 
+
+
+
 public class BaseDataSourceRequestor {
 	private final  Logger logger = LoggerFactory.getLogger(BaseDataSourceRequestor.class);
 	@Autowired

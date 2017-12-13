@@ -164,12 +164,10 @@ implements IDataSourceRequestor {
 						resource_tag = Conts.TAG_MATCH;
 						retdata.put("respCode", "00");
 						retdata.put("respDesc", "认证一致");
-					}else if("0034".equals(jixin.getReturncode()) ||
-							"0001".equals(jixin.getReturncode())){
+					}else if("0034".equals(jixin.getReturncode())){
 						resource_tag = Conts.TAG_UNMATCH;
 						retdata.put("respCode", "01");
 						retdata.put("respDesc", "认证不一致");
-						retdata.put("respDetail", jixin.getErrtext());
 					}else if("0006".equals(jixin.getReturncode())){
 						retdata.put("respCode", "02");
 						retdata.put("respDesc", "不支持验证");
