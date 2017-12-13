@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="300" />
+		<property name="maxIdle" value="200" />
+		<property name="numTestsPerEvictionRun" value="128" />
+		<property name="testOnBorrow" value="true" />
+		<property name="blockWhenExhausted" value="false" />
+	</bean>
+
+	<bean id="jedisShardInfo" class="redis.clients.jedis.JedisShardInfo">
+	<constructor-arg index="0" value="${sys.credit.env.redis.master.host}" />
+	<constructor-arg index="1" value="${sys.credit.env.redis.master.port}" type="int" />
+	</bean>
+	<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1">
+			<!-- <list>
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0" value="10.214.0.102"/>
+					<constructor-arg index="1" value="26381" type="int"/>
+				</bean>
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0" value="10.214.0.110"/>
+					<constructor-arg index="1" value="26381" type="int"/>
+				</bean>
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0" value="10.214.0.111"/>
+					<constructor-arg index="1" value="26381" type="int"/>
+				</bean>
+			</list> -->
+			<list>
+                <ref bean="jedisShardInfo" />
+            </list> 
+		</constructor-arg>
+	</bean>
+
+	<bean id="connectionFactory"
+		  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="poolConfig" ref="jedisPoolConfig" />
+		<property name="port" value="${sys.credit.env.redis.master.port}" />
+		<property name="hostName" value="${sys.credit.env.redis.master.host}" />
+	</bean>
+
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+</beans>
