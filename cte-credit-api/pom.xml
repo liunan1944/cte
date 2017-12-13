@@ -1,0 +1,114 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.cte.credit.api</groupId>
+  <artifactId>cte-credit-api</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>cte-credit-api</name>
+  <url>http://maven.apache.org</url>
+<properties>
+  		<credit-api.version>0.0.1-SNAPSHOT</credit-api.version>
+  		<credit-remote-api.version>0.0.1-SNAPSHOT</credit-remote-api.version>
+  		<credit-base.version>0.0.1-SNAPSHOT</credit-base.version>
+  		<credit-model.version>1.1</credit-model.version>
+  		
+  		<spring.version>4.2.0.RELEASE</spring.version>
+  		<jms.version>6.0</jms.version>
+  		<xstream.version>1.3.1</xstream.version>
+  		<freemarker.version>2.3.23</freemarker.version>
+  		<bcprov.version>1.48</bcprov.version>
+		<xfire.version>1.2.6</xfire.version>
+		<viewer.version>1.0.1</viewer.version>
+		<codec.version>1.6</codec.version>
+		<json-lib.version>2.4</json-lib.version>
+		<servlet-api.version>3.1.0</servlet-api.version>
+		<fastjson.version>1.1.41</fastjson.version>
+		<commons-dbcp2>2.1</commons-dbcp2>
+		
+		<hibernate-annotations.version>3.2.0.Final</hibernate-annotations.version>
+  		<hibernate-core.version>3.6.0.Final</hibernate-core.version>
+		
+		<log4j-api.version>2.6.1</log4j-api.version>
+		<log4j-core.version>2.6.1</log4j-core.version>
+		<log4j-slf4j-impl.version>2.6.1</log4j-slf4j-impl.version>
+		<log4j-jcl.version>2.6.1</log4j-jcl.version>
+		<log4j-1.2-api.version>2.6.1</log4j-1.2-api.version>
+		<log4j-web.version>2.6.1</log4j-web.version>
+		
+		<jackson-core.version>2.7.3</jackson-core.version>
+		<jackson-databind.version>2.7.3</jackson-databind.version>
+		<jackson-annotations.version>2.7.3</jackson-annotations.version>
+		<jackson-mapper-asl.version>1.9.2</jackson-mapper-asl.version>
+		
+		<httpclient.version>4.5.2</httpclient.version>
+		<httpcore.version>4.4.5</httpcore.version>
+		
+		<aspectjweaver.version>1.8.5</aspectjweaver.version>
+		<servlet.version>3.1.0</servlet.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.version>0.0.1-SNAPSHOT</project.version>
+		<disruptor.version>3.3.4</disruptor.version>		
+	</properties>
+	
+	<dependencies>
+	    <dependency>
+	      <groupId>junit</groupId>
+	      <artifactId>junit</artifactId>
+	      <version>3.8.1</version>
+	      <scope>test</scope>
+	    </dependency>
+  </dependencies>
+  
+  <distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Release Repository</name>
+			<url>
+                http://10.214.124.56:8081/nexus/content/repositories/releases
+            </url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Snapshot Repository</name>
+			<url>
+                http://10.214.124.56:8081/nexus/content/repositories/snapshots
+            </url>
+			<uniqueVersion>true</uniqueVersion>
+		</snapshotRepository>
+	</distributionManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+				<version>3.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.2</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<warSourceExcludes>**/*-env.properties,**/credit-common-log4j2.xml</warSourceExcludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.1</version>
+			</plugin>
+		</plugins>
+	</build>
+</project>

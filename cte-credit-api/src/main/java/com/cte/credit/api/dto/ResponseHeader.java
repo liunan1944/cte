@@ -19,7 +19,7 @@ public class ResponseHeader implements Serializable {
 	private String version;
 	/** 时间戳 */
 	private Date retdate;
-	
+
 	 
 	public String getResponse_sn() {
 		return response_sn;
