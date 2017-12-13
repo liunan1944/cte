@@ -2,6 +2,14 @@ package com.cte.credit.common.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.SocketTimeoutException;
+
+
+
+import org.codehaus.xfire.XFireException;
+import org.codehaus.xfire.XFireRuntimeException;
+import org.codehaus.xfire.fault.XFireFault;
+
 import com.alibaba.fastjson.JSONException;
 
 public class ExceptionUtil {
@@ -24,6 +32,18 @@ public class ExceptionUtil {
 	   }
 	   if(exeMsg.toLowerCase().indexOf("send message") > -1){
 		   return true;
+	   }
+	   //XFireRuntimeException>XFireFault>XFireException>SocketTimeoutException>
+	   if(ex instanceof XFireRuntimeException){
+		   if(ex.getCause()!=null&&ex.getCause() instanceof XFireFault){
+			   Throwable ex_XfireFault=ex.getCause();
+			   if(ex_XfireFault.getCause()!=null&&ex_XfireFault.getCause() instanceof XFireException){
+				   Throwable ex_SocketTimeout=ex_XfireFault.getCause();
+				   if(ex_SocketTimeout.getCause()!=null&&ex_SocketTimeout.getCause() instanceof SocketTimeoutException){
+					   return true;
+				   }
+			   }
+		   }
 	   }
 	   if(ex instanceof  JSONException){
 		   return true;

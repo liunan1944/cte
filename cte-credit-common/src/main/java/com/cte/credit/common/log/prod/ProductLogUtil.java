@@ -39,7 +39,9 @@ public class ProductLogUtil {
 		logger.info("{}交易请求保存开始...", trade_id);
 		final String encryptWords = propertyEngine.readById("sys_public_encode_keys");
 		final String des_key = propertyEngine.readById("sys_public_des_key");
-		String sql = "INSERT INTO T_SYS_REQ_HEADER(REQUST_SN ,"
+		String sql = "INSERT INTO CPDB_DS.T_SYS_REQ_HEADER("
+				+"ID,"
+				+ "REQUST_SN ,"
 				+ "TRADE_ID ,"
 				+ "VERSION ,"
 				+ "ACCT_ID ,"
@@ -47,7 +49,7 @@ public class ProductLogUtil {
 				+ "IP_ADDRESS ,"
 				+ "OPERID ,"
 				+ "REQ_TIME ,"
-				+ "PROD_ID VALUES(?,?,?,?,?,?,?,?,?)";
+				+ "PROD_ID) VALUES(CPDB_DS.SEQ_SYS_REQ_HEADER.NEXTVAL,?,?,?,?,?,?,?,?,?)";
 		this.daoService.getJdbcTemplate().update(sql, new Object[]{	
 				req.getRequst_sn(),
 				trade_id,
@@ -60,7 +62,8 @@ public class ProductLogUtil {
 				req.getProdId()	
 		});
 		if(req.getParams()!=null){
-			sql = "INSERT INTO T_SYS_REQ_PARAM(TRADE_ID,KEY_CODE,VALUE) VALUES(?,?,?)";
+			sql = "INSERT INTO CPDB_DS.T_SYS_REQ_PARAM(ID,TRADE_ID,KEY_CODE,VALUE) "
+					+ "VALUES(CPDB_DS.SEQ_SYS_REQ_PARAM.NEXTVAL,?,?,?)";
 			final Map<String, Object> params = new HashMap<String, Object>();
 			params.putAll(req.getParams());
 			final String[] keys = params.keySet().toArray(new String[params.size()]);
@@ -101,7 +104,9 @@ public class ProductLogUtil {
 		final String encryptWords = propertyEngine.readById("sys_public_encode_keys");
 		final String des_key = propertyEngine.readById("sys_public_des_key");
 
-				String sql = "INSERT INTO T_SYS_RSP_HEADER(RESPONSE_SN ,"
+				String sql = "INSERT INTO CPDB_DS.T_SYS_RSP_HEADER("
+						+"ID,"
+						+ "RESPONSE_SN ,"
 						+ "TRADE_ID ,"
 						+ "VERSION ,"
 						+ "RET_DATE ,"
@@ -109,7 +114,7 @@ public class ProductLogUtil {
 						+ "RET_MSG ,"
 						+ "TIME_COST ,"
 						+ "IFACE_TAG ,"
-						+ "DS_TAG) VALUES(?,?,?,?,?,?,?,?,?)";
+						+ "DS_TAG) VALUES(CPDB_DS.SEQ_SYS_RSP_HEADER.NEXTVAL,?,?,?,?,?,?,?,?,?)";
 				this.daoService.getJdbcTemplate().update(sql, new Object[]{
 						rsp.getResponse_sn(),
 						trade_id,
@@ -122,7 +127,8 @@ public class ProductLogUtil {
 						rsp.getDs_tags()
 				});
 				if(rsp.getRetdata()!=null){
-					sql = "INSERT INTO T_SYS_RSP_PARAM(TRADE_ID,KEY_CODE,VALUE) VALUES(?,?,?)";
+					sql = "INSERT INTO CPDB_DS.T_SYS_RSP_PARAM(ID,TRADE_ID,KEY_CODE,VALUE) "
+							+ "VALUES(CPDB_DS.SEQ_SYS_RSP_PARAM.NEXTVAL,?,?,?)";
 					final Map<String, Object> params = new HashMap<String, Object>();
 					params.putAll(rsp.getRetdata());
 					final String[] keys = params.keySet().toArray(new String[params.size()]);
@@ -157,22 +163,5 @@ public class ProductLogUtil {
 			                });
 			}
 	 logger.info("{}交易响应保存结束...", trade_id);
-	}
-	//测试账户扣除测试条数
-	public boolean updateTestProd(String acct_id,String prod){
-		String sql = " select test_num cnt cpdb_ds.t_sys_acct_prods d  where d.acct_id=? and d.prod_limit=? and rownum=1 ";
-		Integer result = this.daoService.findOneBySql(sql, new Object[]{acct_id,prod},Integer.class);
-		if(result<=0){
-			return false;
-		}
-		String sql1 = " update cpdb_ds.t_sys_acct_prods d set d.test_num=d.test_num-1 where d.acct_id=? and d.prod_limit=? ";
-		this.daoService.getJdbcTemplate().update(sql1,acct_id,prod);
-		return true;
-	}
-	public boolean isRepeatTrad(String reqeust_sn,String acct_id,String prod){
-		String sql = " select count(1) cnt from cpdb_ds.t_sys_req_header m "
-				+ "where m.requst_sn=? and m.acct_id=? and m.prod_id=? ";
-		Integer result = this.daoService.findOneBySql(sql, new Object[]{reqeust_sn,acct_id,prod},Integer.class);
-		return result>0;
 	}
 }
