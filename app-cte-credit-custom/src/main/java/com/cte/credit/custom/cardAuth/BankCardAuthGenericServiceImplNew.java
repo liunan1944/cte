@@ -93,7 +93,8 @@ public class BankCardAuthGenericServiceImplNew extends BaseCustomCoreService
 				CRSStatusEnum retstatus = CRSStatusEnum.valueOf(retdata.get(
 						Conts.KEY_RET_STATUS).toString());
 				response.setRetcode(retstatus.getRet_sub_code());
-				response.setRetmsg(retstatus.getRet_msg());
+				response.setRetmsg(String.valueOf(retdata.get(
+						Conts.KEY_RET_MSG)));
 			} else {
 				response.setRetcode(Conts.KEY_STATUS_SUCCESS);
 				response.setRetdata((Map<String, Object>) retdata.get("retdata"));
