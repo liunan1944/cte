@@ -23,6 +23,7 @@ import com.cte.credit.api.dto.CRSCoreResponse;
 import com.cte.credit.api.iface.ICoreService;
 import com.cte.credit.common.agent.RouteDispatch;
 import com.cte.credit.common.annotation.ProductInterceptorClass;
+import com.cte.credit.common.counter.GlobalCounter;
 import com.cte.credit.common.template.PropertyUtil;
 import com.cte.credit.common.util.SpringContextUtils;
 import com.cte.credit.common.util.StringUtil;
@@ -139,7 +140,10 @@ public class BaseServiceAction {
 	    	logger.info("{} 产品处理器：开始请求后端定制产品.目标投递：{}",prefix,"custom");
 			resp = customService.request(trade_id,request);
 	    }
-		
+	    // redis数据流量监控
+	    String redis_lisen = "gw-"+final_route;
+		GlobalCounter.sign(redis_lisen);
+		logger.info("{} 流量监控+1:{}", trade_id,redis_lisen);
 		logger.info("{} 产品处理器：投递结束,总计耗时：{} ms",new Object[]{prefix,new Date().getTime()-start});
 		return resp;
 	}
@@ -169,7 +173,7 @@ public class BaseServiceAction {
 	public int acctNormal(Account account,String product){
 		if("0".equals(account.getStatus())){
 			ProdLimit prod = matchProd(account.getAcct_id(),product);
-			logger.info("获取产品信息:{}",JSON.toJSONString(prod));
+//			logger.info("获取产品信息:{}",JSON.toJSONString(prod));
 			if(prod!=null){
 				if("1".equals(prod.getStatus())){
 					return 1;						
