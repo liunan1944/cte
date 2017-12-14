@@ -1,0 +1,35 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<!-- 数据源请求处理器定义 -->
+<beans>
+	<!-- 数据源序号：1 数据源名称：爱金公安核查 数据源描述：公安核查 -->
+	<bean name="ds_aijin_jx"
+		class="com.cte.credit.ds.client.aijin.AiJinDataSourceRequestor">
+		<property name="paramIds">
+			<value>name,cardNo,flag,acct_id</value>
+		</property>
+		<property name="aijin_address">
+			<value>${sys.credit.client.http.aijin.address}</value>
+		</property>
+		<property name="account">
+			<value>${sys.credit.client.http.aijin.account}</value>
+		</property>
+		<property name="privateKey">
+			<value>${sys.credit.client.http.aijin.privateKey}</value>
+		</property>
+	</bean>
+	
+	<!-- 数据源序号：2  数据源名称：吉信非精准三要素核查：106 -->
+	<bean name="ds_jixin_bank3"
+		class="com.cte.credit.ds.client.jixin.JiXin106Requestor">
+		<property name="paramIds">
+			<value>name,cardNo,cardId</value>
+		</property>
+	</bean>
+	<!-- 数据源序号：3  数据源名称：吉信非精准四要素核查：107 -->
+	<bean name="ds_jixin_bank4"
+		class="com.cte.credit.ds.client.jixin.JiXin107Requestor">
+		<property name="paramIds">
+			<value>name,cardNo,cardId,phone</value>
+		</property>
+	</bean>
+</beans>

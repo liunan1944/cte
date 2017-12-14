@@ -36,7 +36,6 @@ import com.cte.credit.gw.action.dto.ProductDto;
 import com.cte.credit.gw.action.dto.Request;
 import com.cte.credit.gw.dao.iface.IAccountService;
 import com.cte.credit.gw.dto.Account;
-import com.cte.credit.gw.dto.ProdLimit;
 import com.cte.credit.gw.quartz.init.AccountInitUtil;
 
 
@@ -92,8 +91,8 @@ public class CreditMainAction extends BaseServiceAction{
 				CustomServiceEnum custom_prod = CustomServiceEnum.match(productDto.getProd_id());
 				if(custom_prod==null){
 					logger.info("{} 无合适适配产品:{}",prefix,productDto.getProd_id());
-					output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_PROD_NOTEXISTS.ret_sub_code);
-					output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_PROD_NOTEXISTS.ret_msg);
+					output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_FAILED_SYS_PROD_NOTEXISTS.ret_sub_code);
+					output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_FAILED_SYS_PROD_NOTEXISTS.ret_msg);
 					output.put(Conts.KEY_RET_DATA, null);
 				}else{
 					int acct_valid = acctNormal(account,productDto.getProd_id());
@@ -156,13 +155,9 @@ public class CreditMainAction extends BaseServiceAction{
 							}
 						}
 						if(isTestUser && testUserNormal){
-							ProdLimit prod_limit = matchProd(acct_id,productDto.getProd_id());
-							if(isPayTag(resp.getIface_tags(),prod_limit.getPay_tags())){
-								logger.info("{} 扣除测试条数",prefix);
-								acctEngine.updateTestProd(trade_id,resp.getIface_tags(),
-										acct_id, productDto.getProd_id());
-							}
-								
+							logger.info("{} 扣除测试条数",prefix);
+							acctEngine.updateTestProd(trade_id,resp.getIface_tags(),
+									acct_id, productDto.getProd_id());								
 						}
 					}
 				}												

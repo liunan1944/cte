@@ -21,6 +21,12 @@
 		retries="${sys.credit.env.dubbo.client.gate2custom.retries}" 
 		version="${sys.credit.env.dubbo.client.gate2custom.version}" 
 		timeout="${sys.credit.env.dubbo.client.gate2custom.timeout}" 
+	interface="com.cte.credit.api.iface.ICoreService" /> 
+	<!-- 生成远程服务代理 -->
+	<dubbo:reference id="custom2Service" check="false"
+		retries="${sys.credit.env.dubbo.client.gate2custom2.retries}" 
+		version="${sys.credit.env.dubbo.client.gate2custom2.version}" 
+		timeout="${sys.credit.env.dubbo.client.gate2custom2.timeout}" 
 	interface="com.cte.credit.api.iface.ICoreService" />  
 	<!-- <import resource="classpath:/context/common/dubbo/basic/common-basic-executor-dubbo-client.xml"/>	 -->
 </beans>

@@ -46,6 +46,18 @@ values (1000017,'sys_public_email_sendId','liunan1944@163.com','发送邮件邮箱','1
 insert into cpdb_ds.t_sys_property_param(id,key_code,key_value,key_desc,ownerid,child_code,child_name,status)
 values (1000018,'sys_public_email_sendPwd','lnzcp1988','发送邮件密码','1q53513de038453c820cf6869w3we342','sys_public_code','系统参数-公用','3');
 
+insert into cpdb_ds.t_sys_property_param(id,key_code,key_value,key_desc,ownerid,child_code,child_name,status)
+values (1000019,'sys_public_hint_customTods','ds2','强制路由到ds应用','1q53513de038453c820cf6869w3we342','sys_public_code','系统参数-公用','3');
+
+insert into cpdb_ds.t_sys_property_param(id,key_code,key_value,key_desc,ownerid,child_code,child_name,status)
+values (1000020,'sys_public_hint_gwTocustom','custom2','强制路由到ds应用','1q53513de038453c820cf6869w3we342','sys_public_code','系统参数-公用','3');
+
+insert into cpdb_ds.t_sys_property_param(id,key_code,key_value,key_desc,ownerid,child_code,child_name,status)
+values (1000021,'sys_public_balance_customTods','routeDs:routeDs2=5:5','路由到ds应用-负载均衡','1q53513de038453c820c43569w327wsx','sys_public_code','系统参数-公用','3');
+
+insert into cpdb_ds.t_sys_property_param(id,key_code,key_value,key_desc,ownerid,child_code,child_name,status)
+values (1000022,'sys_public_balance_gwTocustom','routeCustom:routeeCustom2=5:5','路由到custom应用-负载均衡','1q53513de038453c820c43569w327wsx','sys_public_code','系统参数-公用','3');
+
 commit;
 
 

@@ -12,6 +12,7 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Base64Utils;
 
@@ -20,7 +21,9 @@ import com.cte.credit.api.Conts;
 import com.cte.credit.api.dto.CRSCoreRequest;
 import com.cte.credit.api.dto.CRSCoreResponse;
 import com.cte.credit.api.iface.ICoreService;
+import com.cte.credit.common.agent.RouteDispatch;
 import com.cte.credit.common.annotation.ProductInterceptorClass;
+import com.cte.credit.common.template.PropertyUtil;
 import com.cte.credit.common.util.SpringContextUtils;
 import com.cte.credit.common.util.StringUtil;
 import com.cte.credit.gw.action.crypto.WandaAES;
@@ -44,6 +47,12 @@ public class BaseServiceAction {
 
 	@Resource(name="customService")
 	private ICoreService  customService;
+	@Resource(name="custom2Service")
+	private ICoreService  custom2Service;
+	@Autowired
+	private PropertyUtil propertyEngine;
+	@Autowired
+	private RouteDispatch routeDispatch;
 	/**
 	 * 构建接口输出 
 	 * @param resp
@@ -102,13 +111,35 @@ public class BaseServiceAction {
 	 * @param trade_id
 	 * @param request
 	 * @return
+	 * @throws Exception 
 	 */
-	public CRSCoreResponse route2Next(String trade_id,CRSCoreRequest request){
+	public CRSCoreResponse route2Next(String trade_id,CRSCoreRequest request) 
+			throws Exception{
 		CRSCoreResponse resp = null;
 		long start = new Date().getTime();
 		String prefix = trade_id +" "+ Conts.KEY_SUPPORT_HEADER; //流水号标识
-		logger.info("{} 产品处理器：开始请求后端定制产品.目标投递：{}",prefix,"custom");
-		resp = customService.request(trade_id,request);
+		String route_custom = propertyEngine.readById("sys_public_hint_gwTocustom");//强制路由:1强制
+		String balance_custom = propertyEngine.readById("sys_public_balance_gwTocustom");//负载均衡
+	    String final_route = "routeCustom";
+	    String[] hint_route = route_custom.split(",");
+	    if("1".equals(hint_route[0])){
+	    	logger.info("{} 强制路由:{}",prefix,route_custom);
+	    	if(!StringUtil.isEmpty(hint_route[1])){
+	    		final_route = hint_route[1];
+	    	}   	
+	    }else{
+	    	logger.info("{} 负载均衡:{}",prefix,balance_custom);
+	    	final_route = routeDispatch.dispatch(final_route, 
+	    			"gw", balance_custom);
+	    }
+	    if("routeCustom2".equals(final_route)){
+	    	logger.info("{} 产品处理器：开始请求后端定制产品.目标投递：{}",prefix,"custom2");
+			resp = custom2Service.request(trade_id,request);
+	    }else{
+	    	logger.info("{} 产品处理器：开始请求后端定制产品.目标投递：{}",prefix,"custom");
+			resp = customService.request(trade_id,request);
+	    }
+		
 		logger.info("{} 产品处理器：投递结束,总计耗时：{} ms",new Object[]{prefix,new Date().getTime()-start});
 		return resp;
 	}

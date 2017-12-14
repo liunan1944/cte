@@ -18,8 +18,14 @@
 
 	<!-- 生成远程服务代理 -->
 	<dubbo:reference id="dataSourceService" 
-		retries="${sys.credit.env.dubbo.client.custom2ds.retries}" 
-		version="${sys.credit.env.dubbo.client.custom2ds.version}"
-		timeout="${sys.credit.env.dubbo.client.custom2ds.timeout}" 
+		retries="${sys.credit.env.dubbo.client.customds.retries}" 
+		version="${sys.credit.env.dubbo.client.customds.version}"
+		timeout="${sys.credit.env.dubbo.client.customds.timeout}" 
+	interface="com.cte.credit.api.iface.IDataSourceService" />
+	<!-- 生成远程服务代理 -->
+	<dubbo:reference id="ds2Service" 
+		retries="${sys.credit.env.dubbo.client.customds2.retries}" 
+		version="${sys.credit.env.dubbo.client.customds2.version}"
+		timeout="${sys.credit.env.dubbo.client.customds2.timeout}" 
 	interface="com.cte.credit.api.iface.IDataSourceService" />
 </beans>

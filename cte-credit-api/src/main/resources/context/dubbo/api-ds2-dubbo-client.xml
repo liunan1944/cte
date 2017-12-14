@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+	<description>
+		Ds2需要调用的外部dubbo接口定义
+	</description>
+	<!-- 同一个应用中此标签只能出现一次-->
+	<!-- <dubbo:application name="${sys.credit.env.dubbo.client.ds.name}" /> -->
+	
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry address="zookeeper://${sys.credit.env.zookeeper.hosts}" />
+
+	<!-- 生成远程服务代理 -->
+	<!-- <import resource="classpath:/context/common/dubbo/basic/common-basic-executor-dubbo-client.xml"/> -->
+	<!-- <import resource="classpath:/context/common/dubbo/basic/common-basic-dubbo-monitor-register.xml"/> -->
+</beans>

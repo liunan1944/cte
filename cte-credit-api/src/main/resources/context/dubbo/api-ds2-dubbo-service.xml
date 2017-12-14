@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans        
+    http://www.springframework.org/schema/beans/spring-beans.xsd        
+    http://code.alibabatech.com/schema/dubbo        
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+ 	<description>
+		Ds2 dubbo接口的服务端定义
+	</description>
+    <!-- 同一个应用中此标签只能出现一次-->
+    <dubbo:application name="${sys.credit.env.dubbo.client.ds2.name}"  />
+  
+ 	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry address="zookeeper://${sys.credit.env.zookeeper.hosts}" />
+ 	
+    <!-- 用dubbo协议在XX端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="${sys.credit.env.dubbo.server.ds2.dubboport}" />
+ 
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service retries="${sys.credit.env.dubbo.server.ds2.retries}" 
+	    timeout="${sys.credit.env.dubbo.server.ds2.timeout}" 
+	    version="${sys.credit.env.dubbo.server.ds2.version}"
+	    interface="com.cte.credit.api.iface.IDataSourceService" 
+    	ref="ds2Service" />
+ 
+    <!-- 具体服务实现 -->
+    <bean id="ds2Service" class="com.cte.credit.ds.DataSourceService" />
+</beans>

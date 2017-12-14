@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<configuration status="warn">    
+  <appenders>    
+    <Console name="Console" target="SYSTEM_OUT">    
+      <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>    
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36}  %M - %msg%xEx%n"/>    
+    </Console>    
+    <File name="log" fileName="target/test.log" append="false">    
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36}  %M - %msg%xEx%n"/>    
+    </File>    
+    <RollingFile name="RollingFile" fileName="/opt/idc/logs/app-cte-credit-custom2/app-cte-credit-custom2.log"    
+                 filePattern="/opt/idc/logs/app-cte-credit-custom2/$${date:yyyy-MM}/app-cte-credit-custom2-%d{MM-dd-yyyy}-%i.log.gz">    
+       <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%t] (%c) - %m%n</Pattern>
+            </PatternLayout>   
+	    <Policies>  
+	        <TimeBasedTriggeringPolicy modulate="true" interval="1"/>  
+	    </Policies>   
+    </RollingFile>    
+  </appenders>    
+  <loggers>    
+    <root level="info">    
+      <appender-ref ref="RollingFile"/>
+     <!--  <appender-ref ref="Console"/>  -->
+    </root>   
+  </loggers>    
+</configuration>  

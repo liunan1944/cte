@@ -66,5 +66,6 @@
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/bcprov-jdk15on-1.48.jar"/>
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/cte-credit-api-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/cte-credit-common-0.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/javax.mail-1.5.5.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
