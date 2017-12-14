@@ -34,7 +34,7 @@ public class TransUtil {
 		
 		if (signkey != null) {
 			String resp = this.object2String(trans);
-			System.out.println(resp);
+//			System.out.println(resp);
 			Map<String, String> resMap = mapper.readValue(resp, Map.class);
 			String sign = SignUtil.getSign(resMap, signkey);
 
