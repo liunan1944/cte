@@ -87,6 +87,7 @@ public class Conts
   public static final String KEY_DESENC_KEY = "wandacredit";
   
   /***************************标签常量定义******************************/
+  public static final String TAG_UNSUPPORT = "unsupport";
   public static final String TAG_SYS_ERROR = "error";
   public static final String TAG_SYS_TIMEOUT = "time_out";
   public static final String TAG_INCACHE_FOUND = "incache_found";

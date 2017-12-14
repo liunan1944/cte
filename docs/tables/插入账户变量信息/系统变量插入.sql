@@ -40,9 +40,15 @@ values (1000013,'sys_public_encode_keys','cardNo,cardId','加密code','0753513de03
 insert into cpdb_ds.t_sys_property_param(id,key_code,key_value,key_desc,ownerid,child_code,child_name,status)
 values (1000016,'sys_public_gw_test_mock','0','是否走mock:1走,0不走','1q53513de038453c820cf6869w3we342','sys_gw_code','系统参数-gw','3');
 
+insert into cpdb_ds.t_sys_property_param(id,key_code,key_value,key_desc,ownerid,child_code,child_name,status)
+values (1000017,'sys_public_email_sendId','liunan1944@163.com','发送邮件邮箱','1q53513de038453c820cf6869w3we342','sys_public_code','系统参数-公用','3');
+
+insert into cpdb_ds.t_sys_property_param(id,key_code,key_value,key_desc,ownerid,child_code,child_name,status)
+values (1000018,'sys_public_email_sendPwd','lnzcp1988','发送邮件密码','1q53513de038453c820cf6869w3we342','sys_public_code','系统参数-公用','3');
+
 commit;
 
 
-update cpdb_ds.t_sys_property_model d set d.ownerid='1q53513de038453c820cf6869w3we342';
-update cpdb_ds.t_sys_property_param m set m.ownerid='1q53513de038453c820cf6869w3we342';
+update cpdb_ds.t_sys_property_model d set d.ownerid='1q53513de038453c820cf6869w327wsx';
+update cpdb_ds.t_sys_property_param m set m.ownerid='1q53513de038453c820cf6869w327wsx';
 commit;

@@ -26,7 +26,6 @@ import com.cte.credit.common.util.HttpsHelper;
 import com.cte.credit.common.util.JSONUtil;
 import com.cte.credit.common.util.ParamUtil;
 import com.cte.credit.common.util.StringUtil;
-import com.cte.credit.ds.BaseDataSourceRequestor;
 import com.cte.credit.ds.client.jixin.base.CommonBean;
 import com.cte.credit.ds.client.jixin.base.TransUtil;
 import com.cte.credit.ds.dao.domain.jixin.Jixin_bank_result;
@@ -34,7 +33,7 @@ import com.cte.credit.ds.dao.iface.jixin.IJixinBankService;
 import com.cte.credit.ds.iface.IDataSourceRequestor;
 
 @DataSourceClass(bindingDataSourceId="ds_jixin_bank4")
-public class JiXin107Requestor extends BaseDataSourceRequestor
+public class JiXin107Requestor extends BaseJiXinSourceRequestor
 implements IDataSourceRequestor {
 	private final  Logger logger = LoggerFactory.getLogger(JiXin107Requestor.class);
 	@Autowired
@@ -159,35 +158,7 @@ implements IDataSourceRequestor {
 					logObj.setState_msg(jixin.getErrtext());
 					logObj.setState_code(Conts.TRADE_STATE_SUCC);
 					
-					boolean is_fail = false;
-					if("0000".equals(jixin.getReturncode())){
-						resource_tag = Conts.TAG_MATCH;
-						retdata.put("respCode", "00");
-						retdata.put("respDesc", "认证一致");
-					}else if("0034".equals(jixin.getReturncode())){
-						resource_tag = Conts.TAG_UNMATCH;
-						retdata.put("respCode", "01");
-						retdata.put("respDesc", "认证不一致");
-					}else if("0006".equals(jixin.getReturncode())){
-						retdata.put("respCode", "02");
-						retdata.put("respDesc", "不支持验证");
-						retdata.put("respDetail", jixin.getErrtext());
-						resource_tag = Conts.TAG_UNSUPPORT;
-					}else{
-						is_fail = true;	
-					}
-					if(is_fail){
-						resource_tag = Conts.TAG_TST_FAIL;
-						rets.put(Conts.KEY_RET_STATUS, 
-								CRSStatusEnum.STATUS_FAILED_DS_ZT_BANKCARD_AUTHEN_EXCEPTION);
-						rets.put(Conts.KEY_RET_MSG, jixin.getErrtext());
-						rets.put(Conts.KEY_RET_TAG, resource_tag);
-					}else{
-						rets.put(Conts.KEY_RET_TAG, resource_tag);
-						rets.put(Conts.KEY_RET_DATA, retdata);
-						rets.put(Conts.KEY_RET_STATUS, CRSStatusEnum.STATUS_SUCCESS);
-						rets.put(Conts.KEY_RET_MSG, "采集成功!");
-					}
+					rets = buildJiXinResp(prefix,jixin);
 				}						
 			}										
 		}catch(Exception ex){

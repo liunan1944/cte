@@ -1,23 +1,29 @@
 package com.cte.credit.ds.action;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cte.credit.api.Conts;
 import com.cte.credit.api.dto.DataSource;
 import com.cte.credit.api.enums.CRSStatusEnum;
 import com.cte.credit.common.template.PropertyUtil;
+import com.cte.credit.common.util.SendEmail;
 import com.cte.credit.common.util.StringUtil;
 import com.cte.credit.ds.DataSourceService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.cte.credit.ds.action.dto.EmailDto;
 
 /**
  * @Title: 征信数据源主服务接口
@@ -35,6 +41,8 @@ public class MainDataServiceAction {
     private DataSourceService dataSourceService;
     @Autowired
 	PropertyUtil propertyEngine;
+    @Autowired
+    SendEmail  senEmailService;
     @RequestMapping(value = "fetch/{trade_id}", method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> service(final HttpServletResponse response,
@@ -62,13 +70,31 @@ public class MainDataServiceAction {
         return rets;
     }
     
-    @RequestMapping(value = "testfetch", method = RequestMethod.POST)
+    @RequestMapping(value = "sendEmail", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> test(final HttpServletResponse response,
+    public Map<String,Object> sendEmail(final HttpServletResponse response,
                                       final HttpServletRequest request,
-                                      @RequestBody final DataSource ds)
-            throws Exception {
+                                      @RequestBody final EmailDto email){
     	String trade_id = StringUtil.getRandomNo();
-        return this.service(response, request, trade_id, ds);
+    	String prefix = trade_id +" "+ Conts.KEY_SYS_AGENT_HEADER; //流水号标识
+    	logger.info("{} 开始邮件发送...",prefix);
+    	Map<String,Object> result = new HashMap<String,Object>();
+    	if(StringUtil.isEmpty(email.getContent()) ||
+    		StringUtil.isEmpty(email.getReceiveMails())||
+    		StringUtil.isEmpty(email.getTitle()) ){
+    		logger.info("{} 入参信息为空",prefix);
+    		return null;
+    	}
+    	try {
+			senEmailService.sendEmails(email.getReceiveMails(),
+					email.getContent(), 
+					email.getTitle());
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("{} 邮件发送失败:{}",prefix,e.getMessage());
+		}
+    	result.put("mess", "发送完成");
+    	logger.info("{} 邮件发送完成",prefix);
+        return result;
     }
 }

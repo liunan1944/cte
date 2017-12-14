@@ -7,32 +7,34 @@ import javax.crypto.SecretKey;
 import java.security.Security;
 
 /**
- * Created by caoyanfei079 on 4/23/15.
+ * Created by liunan
  */
-public final class WandaCryptoUtils {
+public final class CTECryptoUtils {
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
-    public static final String createAESPasswordAsHex() throws WandaCryptoAESException {
+    public static final String createAESPasswordAsHex() throws CTECryptoAESException {
         return createAESPasswordAsHex(AESConstants.AES_SIZE_128);
     }
-    public static final String createAESPasswordAsHex(Integer length) throws WandaCryptoAESException {
+    public static final String createAESPasswordAsHex(Integer length) throws CTECryptoAESException {
         byte[] result = createAESPassword(length);
         return Hex.encodeHexString(result);
     }
 
-    public static final byte[] createAESPassword() throws WandaCryptoAESException {
+    public static final byte[] createAESPassword() throws CTECryptoAESException {
         return createAESPassword(AESConstants.AES_SIZE_128);
     }
 
-    public static final byte[] createAESPassword(Integer length) throws WandaCryptoAESException {
+    public static final byte[] createAESPassword(Integer length) 
+    		throws CTECryptoAESException {
         try {
             KeyGenerator kg = KeyGenerator.getInstance(AESConstants.ALGORITHM_AES);
-            kg.init(length);//要生成多少位，只�?��修改这里即可128, 192�?56
+            kg.init(length);
             SecretKey sk = kg.generateKey();
             return sk.getEncoded();
         } catch (Exception e) {
-            throw new WandaCryptoAESException("Failed to create the aes(" + AESConstants.AES_SIZE_128 + ") password", e);
+            throw new CTECryptoAESException("Failed to create the aes("
+        + AESConstants.AES_SIZE_128 + ") password", e);
         }
     }
 }

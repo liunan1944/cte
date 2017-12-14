@@ -23,25 +23,25 @@ import org.apache.http.protocol.HTTP;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cte.tech.dto.ProductDto;
-import com.cte.tech.util.WandaAES;
+import com.cte.tech.util.CTEAES;
 
 /**
- * Created by bjy on 16/8/4.
+ * Created by liunan
  */
 public class MainCTE001 {
 
-	// TODO 请联系万达员工提供相关的信息
+	// TODO 请联系CTE员工提供相关的信息
 	public static String ACCOUNT_ID = "lnzcp_user";
 	public static String HEX_AES_128_PASSWORD = "5ffa26d0e9520a01e0530100007f7ee5";
 	public static String INVOKE_URI = "http://111.231.82.46:30000/app-cte-credit-gw/main/service";
     //超时时间设置10s
 	private static final int timeout = 10000;
 	public static void main(String[] paras) throws Exception {
-		String req_sn1 = UUID.randomUUID().toString().replace("-", "");
-		System.out.println("请求交易号为:"+req_sn1);
+		String req_sn = UUID.randomUUID().toString().replace("-", "");
+		System.out.println("请求交易号为:"+req_sn);
 		Map<String, Object> productDetailParam = new HashMap<>();
 		//产品入参
-		productDetailParam.put("name", "祝嵘");
+		productDetailParam.put("name", "祝期");
 		productDetailParam.put("cardNo", "32110219851128101X");
 		productDetailParam.put("cardId", "6222024301081668996");
 		productDetailParam.put("phone", "15861824887");
@@ -50,22 +50,20 @@ public class MainCTE001 {
 		//产品编号
 		productDto.setProd_id("CTE_001");
 		productDto.setReq_time(System.currentTimeMillis());
-//		productDto.setRequest_sn(req_sn1); //请保证这个id唯一
+		productDto.setRequest_sn(req_sn); //请保证这个id唯一
 		productDto.setReq_data(productDetailParam);
-		System.out.println("请求信息:"+JSON.toJSONString(productDto));
-		System.exit(0);
-		WandaAES wandaAES = new WandaAES(Hex.decodeHex(HEX_AES_128_PASSWORD.toCharArray()));
+		CTEAES cteAES = new CTEAES(Hex.decodeHex(HEX_AES_128_PASSWORD.toCharArray()));
 		String jsonString = JSON.toJSONString(productDto);
-		byte[] encryptBytes = wandaAES.encrypt(jsonString);
+		byte[] encryptBytes = cteAES.encrypt(jsonString);
         //2.2 BASE64
         String base64String = Base64.encodeBase64String(encryptBytes);
         JSONObject jsonResult = new JSONObject();	
 		jsonResult.put("request_body", base64String);
 		System.out.println("请求信息:"+JSON.toJSONString(jsonResult));
-		String response = HttpSend(JSON.toJSONString(jsonResult),INVOKE_URI,wandaAES);
+		String response = HttpSend(JSON.toJSONString(jsonResult),INVOKE_URI);
 		System.out.println("调用身份核查产品返回结果值:\n"+response);
 	}
-	 public static String HttpSend(String paramStr,String url,WandaAES wandaAES) 
+	 public static String HttpSend(String paramStr,String url) 
 			 throws ClientProtocolException, IOException {
     	DefaultHttpClient httpClient = new DefaultHttpClient();
     	HttpParams httpParams = httpClient.getParams();
@@ -75,7 +73,6 @@ public class MainCTE001 {
 		httpPost.addHeader(HTTP.CONTENT_TYPE,
 				"application/json");
 		httpPost.addHeader("X_CTE_ACCT_ID", ACCOUNT_ID);
-		System.out.println("获取账户信息:"+ACCOUNT_ID);
 		StringEntity se = new StringEntity(paramStr,"utf-8");
 		httpPost.setEntity(se);
 		HttpResponse response = httpClient.execute(httpPost);
