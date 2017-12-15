@@ -60,30 +60,30 @@ public class BaseServiceAction {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map<String,Object> formatOutPut(CRSCoreResponse resp,String request_sn) throws Exception{
-		Map<String,Object> respMap = new HashMap<String,Object>();
+	public void formatOutPut(String prefix,CRSCoreResponse resp,
+			String request_sn,Map<String,Object> output) throws Exception{
 		if(resp.getRetcode()!=null){
-			respMap.put(key_retcode, resp.getRetcode());
+			output.put(key_retcode, resp.getRetcode());
 		}
 		if(resp.getRetmsg()!=null){
-			respMap.put(key_retmsg, resp.getRetmsg());
+			output.put(key_retmsg, resp.getRetmsg());
 		}
 		if(resp.getRetdata()!=null){
-			respMap.put(key_retdata,resp.getRetdata());
+			output.put(key_retdata,resp.getRetdata());
 		}
 		if(resp.getRetdate()!=null){
-			respMap.put(key_retdate, resp.getRetdate());
+			output.put(key_retdate, resp.getRetdate());
 		}
 		if(resp.getVersion()!=null){
-			respMap.put(key_version, resp.getVersion());
+			output.put(key_version, resp.getVersion());
 		}
 		if(resp.getResponse_sn()!=null){
-			respMap.put(key_response_sn, resp.getResponse_sn());
+			output.put(key_response_sn, resp.getResponse_sn());
 		}
 		if(!StringUtil.isEmpty(request_sn)){
-			respMap.put(key_request_sn, request_sn);
+			output.put(key_request_sn, request_sn);
 		}
-		return respMap;
+		logger.info("{} 包装出参结束!",prefix);
 	}
 	
 	/**

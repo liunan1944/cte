@@ -150,6 +150,7 @@ implements IDataSourceRequestor {
 			rets.put(Conts.KEY_RET_MSG, "数据源处理时异常! 详细信息:"+ex.getMessage());
 			rets.put(Conts.KEY_RET_TAG, resource_tag);
 		}finally {
+			resource_tag = String.valueOf(rets.get(Conts.KEY_RET_TAG));
 			logObj.setRsp_time(new Timestamp(System.currentTimeMillis()));
 			logObj.setTag(resource_tag);
 			dataLogEngine.writeDsLog(trade_id, logObj);

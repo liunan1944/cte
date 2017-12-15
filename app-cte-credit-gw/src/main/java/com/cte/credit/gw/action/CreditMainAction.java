@@ -141,8 +141,11 @@ public class CreditMainAction extends BaseServiceAction{
 						        req.setProduct_id(productDto.getProd_id());
 						        prodLogEngine.writeReqLog(trade_id, req);
 								resp = route2Next(trade_id,req);
-								output = formatOutPut(resp,productDto.getRequest_sn());
-								prodLogEngine.writeRspLog(trade_id, productDto.getProd_id(), resp, new Date().getTime()-startTime);
+								formatOutPut(prefix,resp,
+										productDto.getRequest_sn(),output);
+								prodLogEngine.writeRspLog(trade_id, 
+										productDto.getProd_id(), resp, 
+										new Date().getTime()-startTime);
 							}						
 						}
 					}					
