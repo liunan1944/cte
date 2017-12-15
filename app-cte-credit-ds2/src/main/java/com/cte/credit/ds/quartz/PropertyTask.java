@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.cte.credit.common.template.PropertyUtil;
 import com.cte.credit.common.util.StringUtil;
+import com.cte.credit.ds.dao.domain.jixin.Jixin_bank_result;
+import com.cte.credit.ds.dao.iface.jixin.IJixinBankService;
 import com.cte.credit.ds.quartz.init.BaseDataParser;
 import com.cte.credit.ds.quartz.init.PropertyInitUtil;
 /**
@@ -21,6 +23,8 @@ public class PropertyTask {
 	private static Logger logger = LoggerFactory.getLogger(PropertyTask.class);
 	@Autowired
 	private BaseDataParser propertyService;
+	@Autowired
+	private IJixinBankService jixinService;
 	public void exec() {
 		String trade_id = StringUtil.getRandomNo();	
 		logger.info("{} 加载系统变量任务开始...",trade_id);
@@ -45,7 +49,10 @@ public class PropertyTask {
 					}
 					PropertyUtil.properties=property_map;
 				}				
-			}		
+			}
+			Jixin_bank_result jixin = new Jixin_bank_result();
+			jixin.setTrade_id("20171213180322159UJHY");
+			jixinService.queryJiXin(trade_id,jixin);
 		}catch(Exception e){
 			logger.info("{} 加载系统变量任务异常!",trade_id);
 		}		

@@ -23,10 +23,10 @@ import com.cte.credit.api.enums.CRSStatusEnum;
 import com.cte.credit.api.iface.IDataSourceService;
 import com.cte.credit.common.agent.RouteDispatch;
 import com.cte.credit.common.annotation.CustomClass;
-import com.cte.credit.common.counter.GlobalCounter;
 import com.cte.credit.common.template.PropertyUtil;
 import com.cte.credit.common.util.SpringContextUtils;
 import com.cte.credit.common.util.StringUtil;
+import com.cte.credit.custom.quartz.init.PropertyInitUtil;
 
 @Service
 public class BaseCustomCoreService
@@ -144,8 +144,8 @@ public class BaseCustomCoreService
     	}   	
     }else{
     	logger.info("{} 负载均衡:{}",trade_id,balance_ds);
-    	final_route = routeDispatch.dispatch(final_route, 
-    			"custom", balance_ds);
+    	final_route = routeDispatch.dispatchLocal(final_route, 
+    			"custom", balance_ds,PropertyInitUtil.custom_route_map);
     }
     if("routeDs2".equals(final_route)){
     	logger.info("{} 路由到ds2",trade_id);
@@ -156,7 +156,7 @@ public class BaseCustomCoreService
     }
     // redis数据流量监控
     String redis_lisen = "custom-"+final_route;
-	GlobalCounter.sign(redis_lisen);
+    PropertyInitUtil.routeSet(trade_id,redis_lisen,false);
 	logger.info("{} 流量监控+1:{}", trade_id,redis_lisen);
     return rets;
   }

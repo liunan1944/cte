@@ -1,5 +1,6 @@
 package com.cte.credit.gw.quartz;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,13 @@ public class PropertyTask {
 		String trade_id = StringUtil.getRandomNo();	
 		logger.info("{} 加载系统变量任务开始...",trade_id);
 		try{
+			Calendar now = Calendar.getInstance();  
+			int minute = now.get(Calendar.MINUTE);
+			if(minute<5){
+				logger.info("{} 整点路由统计信息清理...",trade_id);
+				AccountInitUtil.routeSet(trade_id,"gw-routeCustom",true);
+				AccountInitUtil.routeSet(trade_id,"gw-routeCustom2",true);
+			}
 			String ownerId = propertyService.queryOwnerid(AccountInitUtil.model_id);
 			if(StringUtil.isEmpty(ownerId)){
 				logger.info("{} 加载系统变量任务,ownerId为空",trade_id);

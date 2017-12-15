@@ -130,8 +130,8 @@ public class BaseServiceAction {
 	    	}   	
 	    }else{
 	    	logger.info("{} 负载均衡:{}",prefix,balance_custom);
-	    	final_route = routeDispatch.dispatch(final_route, 
-	    			"gw", balance_custom);
+	    	final_route = routeDispatch.dispatchLocal(final_route, 
+	    			"gw", balance_custom,AccountInitUtil.gw_route_map);
 	    }
 	    if("routeCustom2".equals(final_route)){
 	    	logger.info("{} 产品处理器：开始请求后端定制产品.目标投递：{}",prefix,"custom2");
@@ -139,12 +139,12 @@ public class BaseServiceAction {
 	    }else{
 	    	logger.info("{} 产品处理器：开始请求后端定制产品.目标投递：{}",prefix,"custom");
 			resp = customService.request(trade_id,request);
-	    }
-	    // redis数据流量监控
-	    String redis_lisen = "gw-"+final_route;
-		GlobalCounter.sign(redis_lisen);
-		logger.info("{} 流量监控+1:{}", trade_id,redis_lisen);
+	    }	    
 		logger.info("{} 产品处理器：投递结束,总计耗时：{} ms",new Object[]{prefix,new Date().getTime()-start});
+		// redis数据流量监控
+	    String redis_lisen = "gw-"+final_route;
+	    AccountInitUtil.routeSet(trade_id,redis_lisen,false);
+		logger.info("{} 流量监控+1:{}", trade_id,redis_lisen);
 		return resp;
 	}
 	/**

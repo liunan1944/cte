@@ -31,7 +31,11 @@ public class AccountInitUtil {
 	public static List<ProdLimit> prodLimitList = new ArrayList<ProdLimit>();
 	public final static String model_id = "0753513de038453c820cf6869w3f7d3e";
 	public static String model_property_owner_id = "";
-	
+	public static HashMap<String,Integer> gw_route_map = new HashMap<String,Integer>();
+	static{
+		gw_route_map.put("gw-routeCustom", 0);
+		gw_route_map.put("gw-routeCustom2", 0);
+	}
 	private static AccountInitUtil baseAcctUtils;
 	@Autowired
 	private BaseDataParser accountService;
@@ -102,6 +106,18 @@ public class AccountInitUtil {
 			}
 		}
 		return match;
+	}
+	public static synchronized void routeSet(String trade_id
+			,String route,boolean flag){
+		if(gw_route_map.get(route)!=null){
+			if(flag){
+				logger.info("{} 路由统计信息清理",trade_id);
+				gw_route_map.put(route, 0);
+			}else{
+				logger.info("{} 路由统计监控+1",trade_id);
+				gw_route_map.put(route, gw_route_map.get(route)+1);
+			}
+		}		
 	}
 	public void setAccountService(BaseDataParser accountService) {
 		this.accountService = accountService;

@@ -115,16 +115,16 @@ public class DataSourceService extends BaseDataSourceService implements IDataSou
 		logger.info("{} 数据采集任务完毕,耗时:{}", prefix ,new Date().getTime() - reqStart +" ms");
 		
 		//Step7: redis数据源流量监控
-		GlobalCounter.sign(ds_flow_flag);
-		logger.info("{} 流量监控+1", prefix);
-		
-		//Step8: redis数据源熔断监控 
-		if(isErr(rets)){
-			logger.warn("{} 数据源熔断收集器+1：{}", prefix, ds_id);
-			GlobalCounter.sign(ds_error_flag, 30000);
-			logger.info("{} 数据源熔断收集器当前统计数：{}", prefix,
-					GlobalCounter.getCount(ds_error_flag));
-		}
+//		GlobalCounter.sign(ds_flow_flag);
+//		logger.info("{} 流量监控+1", prefix);
+//		
+//		//Step8: redis数据源熔断监控 
+//		if(isErr(rets)){
+//			logger.warn("{} 数据源熔断收集器+1：{}", prefix, ds_id);
+//			GlobalCounter.sign(ds_error_flag, 30000);
+//			logger.info("{} 数据源熔断收集器当前统计数：{}", prefix,
+//					GlobalCounter.getCount(ds_error_flag));
+//		}
 		if (doPrint) {
 			logger.info("{} 数据采集任务完毕,返回消息:{}", prefix, JSONObject.toJSONString(rets,true));
 		}
