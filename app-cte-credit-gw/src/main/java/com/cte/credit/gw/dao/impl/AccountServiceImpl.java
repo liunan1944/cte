@@ -36,28 +36,25 @@ public class AccountServiceImpl  implements IAccountService{
 		List<Map<String, Object>> result = this.daoService.getJdbcTemplate().queryForList(sql,acct_id);
 		return result;
 	}
+	//计算是否有可用测试条数,并扣除
 	@Override
-	public boolean isTestUser(String acct_id,String prod){
+	public synchronized boolean isTestUser(String acct_id,String prod){
 		String sql = "select count(1) cnt from cpdb_ds.t_sys_acct_prods d "
 				+ "where d.acct_id=? and d.prod_limit=? and d.test_num>0";
-		Integer result = this.daoService.findOneBySql(sql, new Object[]{acct_id,prod},Integer.class);
+		Integer result = this.daoService.findOneBySql(sql, 
+				new Object[]{acct_id,prod},Integer.class);
+		if(result>0){
+			String sql1 = " update cpdb_ds.t_sys_acct_prods d set d.test_num=d.test_num-1 where d.acct_id=? and d.prod_limit=? ";
+			this.daoService.getJdbcTemplate().update(sql1,acct_id,prod);
+		}		
 		return result>0;
 	}
 	//测试账户扣除测试条数
 	@Override
-	public boolean updateTestProd(String trade_id,String tag,
+	public synchronized void updateTestProd(String trade_id,String tag,
 			String acct_id,String prod){
 		String sql1 = " update cpdb_ds.t_sys_acct_prods d set d.test_num=d.test_num-1 where d.acct_id=? and d.prod_limit=? ";
 		this.daoService.getJdbcTemplate().update(sql1,acct_id,prod);
-		//插入扣费记录
-		String sql2 = " insert into cpdb_ds.t_sys_payment_log(id,trade_id,acct_id,prod,tags,test_num_cost,status) "
-				+" values (cpdb_ds.seq_sys_payment_log.nextval,?,?,?,?,1,'3') ";
-		this.daoService.getJdbcTemplate().update(sql2, new Object[]{
-				trade_id,
-				acct_id,
-				prod,
-				tag});
-		return true;
 	}
 	@Override
 	public boolean isRepeatTrad(String reqeust_sn,String acct_id,String prod){

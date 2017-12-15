@@ -24,7 +24,6 @@ import com.cte.credit.api.Conts;
 import com.cte.credit.api.dto.CRSCoreRequest;
 import com.cte.credit.api.dto.CRSCoreResponse;
 import com.cte.credit.api.enums.CRSStatusEnum;
-import com.cte.credit.api.enums.custom.CustomServiceEnum;
 import com.cte.credit.common.log.prod.ProductLogUtil;
 import com.cte.credit.common.template.PropertyUtil;
 import com.cte.credit.common.util.ExceptionUtil;
@@ -88,79 +87,66 @@ public class CreditMainAction extends BaseServiceAction{
 				String remoteIp=IPUtils.getIp(request);
 				logger.info("{} 产品处理器：远程IP请求地址:{}.",prefix,remoteIp);
 				
-				CustomServiceEnum custom_prod = CustomServiceEnum.match(productDto.getProd_id());
-				if(custom_prod==null){
-					logger.info("{} 无合适适配产品:{}",prefix,productDto.getProd_id());
-					output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_FAILED_SYS_PROD_NOTEXISTS.ret_sub_code);
-					output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_FAILED_SYS_PROD_NOTEXISTS.ret_msg);
+				int acct_valid = acctNormal(account,productDto.getProd_id());
+				if(acct_valid==-3) {
+					logger.info("{} 获取权限校验失败:-3",prefix);
+					output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_ACCT_FAILED.ret_sub_code);
+					output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_ACCT_FAILED.ret_msg);
+					output.put(Conts.KEY_RET_DATA, null);
+				}else if(acct_valid==-1){
+					logger.info("{} 获取权限校验失败:-1",prefix);
+					output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_PROD_FAILED.ret_sub_code);
+					output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_PROD_FAILED.ret_msg);
 					output.put(Conts.KEY_RET_DATA, null);
 				}else{
-					int acct_valid = acctNormal(account,productDto.getProd_id());
-					if(acct_valid==-3) {
-						logger.info("{} 获取权限校验失败:-3",prefix);
-						output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_ACCT_FAILED.ret_sub_code);
-						output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_ACCT_FAILED.ret_msg);
-						output.put(Conts.KEY_RET_DATA, null);
-					}else if(acct_valid==-1){
-						logger.info("{} 获取权限校验失败:-1",prefix);
-						output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_PROD_FAILED.ret_sub_code);
-						output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_PROD_FAILED.ret_msg);
-						output.put(Conts.KEY_RET_DATA, null);
-					}else{
-						boolean isTestUser = false;
-						boolean testUserNormal = false;
-						logger.info("{} 获取权限校验完成",prefix);
-						if("1".equals(account.getIsfee())){//测试用户
-							isTestUser = true;
-							if(acctEngine.isTestUser(acct_id, productDto.getProd_id())){//测试用户,测试条数未用完
-								logger.info("{} 测试用户:{}",prefix,acct_id);
-								testUserNormal = true;
-							}
-						}
-						if(isTestUser && !testUserNormal){//测试用户,测试条数已用完
-							logger.info("{} 测试条数已用完",prefix);
-							output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_PROD_TEST_FAILED.ret_sub_code);
-							output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_PROD_TEST_FAILED.ret_msg);
-							output.put(Conts.KEY_RET_DATA, null);
-						}else{
-							Map<String,Object> params = productDto.getReq_data();
-							if(params == null || StringUtil.isEmpty(productDto.getRequest_sn())){
-								output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_PARAM.ret_sub_code);
-								output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_PARAM.ret_msg);
-								output.put(Conts.KEY_RET_DATA, null);
-							}else{
-								if(acctEngine.isRepeatTrad(productDto.getRequest_sn(), 
-										acct_id, productDto.getProd_id())){	
-									logger.info("{} 请求交易号重复{} {}",prefix,productDto.getProd_id(),productDto.getRequest_sn());			
-									output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_sub_code);
-									output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_msg);
-									output.put(Conts.KEY_RET_DATA, null);
-								}else{
-									req = new CRSCoreRequest();
-									req.setRequst_sn(productDto.getRequest_sn());
-									req.setApi_key(account.getApi_key());
-									req.setIp_address(remoteIp);
-									req.setOperid(Conts.SUPPORT_OPER_ID);
-									req.setProdId(productDto.getProd_id());
-									req.setVersion(Conts.WS_VERSION);
-									req.setMac_address("UNKOWN");
-									req.setAcct_id(acct_id);
-									req.setParams(params);
-							        req.setProduct_id(productDto.getProd_id());
-							        prodLogEngine.writeReqLog(trade_id, req);
-									resp = route2Next(trade_id,req);
-									output = formatOutPut(resp,productDto.getRequest_sn());
-									prodLogEngine.writeRspLog(trade_id, productDto.getProd_id(), resp, new Date().getTime()-startTime);
-								}						
-							}
-						}
-						if(isTestUser && testUserNormal){
-							logger.info("{} 扣除测试条数",prefix);
-							acctEngine.updateTestProd(trade_id,resp.getIface_tags(),
-									acct_id, productDto.getProd_id());								
+					boolean isTestUser = false;
+					boolean testUserNormal = false;
+					logger.info("{} 获取权限校验完成",prefix);
+					if("1".equals(account.getIsfee())){//测试用户
+						isTestUser = true;
+						if(acctEngine.isTestUser(acct_id, productDto.getProd_id())){//测试用户,测试条数未用完
+							logger.info("{} 测试用户,扣除测试条数:{}",prefix,acct_id);
+							testUserNormal = true;
 						}
 					}
-				}												
+					if(isTestUser && !testUserNormal){//测试用户,测试条数已用完
+						logger.info("{} 测试条数已用完",prefix);
+						output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_PROD_TEST_FAILED.ret_sub_code);
+						output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_PROD_TEST_FAILED.ret_msg);
+						output.put(Conts.KEY_RET_DATA, null);
+					}else{
+						Map<String,Object> params = productDto.getReq_data();
+						if(params == null || StringUtil.isEmpty(productDto.getRequest_sn())){
+							output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_PARAM.ret_sub_code);
+							output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_PARAM.ret_msg);
+							output.put(Conts.KEY_RET_DATA, null);
+						}else{
+							if(acctEngine.isRepeatTrad(productDto.getRequest_sn(), 
+									acct_id, productDto.getProd_id())){	
+								logger.info("{} 请求交易号重复{} {}",prefix,productDto.getProd_id(),productDto.getRequest_sn());			
+								output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_sub_code);
+								output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_msg);
+								output.put(Conts.KEY_RET_DATA, null);
+							}else{
+								req = new CRSCoreRequest();
+								req.setRequst_sn(productDto.getRequest_sn());
+								req.setApi_key(account.getApi_key());
+								req.setIp_address(remoteIp);
+								req.setOperid(Conts.SUPPORT_OPER_ID);
+								req.setProdId(productDto.getProd_id());
+								req.setVersion(Conts.WS_VERSION);
+								req.setMac_address("UNKOWN");
+								req.setAcct_id(acct_id);
+								req.setParams(params);
+						        req.setProduct_id(productDto.getProd_id());
+						        prodLogEngine.writeReqLog(trade_id, req);
+								resp = route2Next(trade_id,req);
+								output = formatOutPut(resp,productDto.getRequest_sn());
+								prodLogEngine.writeRspLog(trade_id, productDto.getProd_id(), resp, new Date().getTime()-startTime);
+							}						
+						}
+					}					
+				}															
 			} catch (DecoderException e) {
 				logger.error("{} 产品处理器：解密异常01:{}",prefix,ExceptionUtil.getTrace(e));
 				output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_ACCT_KEY.ret_sub_code);

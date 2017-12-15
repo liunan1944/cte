@@ -95,6 +95,7 @@ implements IDataSourceRequestor {
 				retdata.put("cardId", cardId);
 				if(jixin_106mock){
 					logger.warn("{} 吉信106走mock!", prefix);
+					resource_tag = Conts.TAG_MATCH;
 					rets.put(Conts.KEY_RET_TAG, resource_tag);
 					rets.put(Conts.KEY_RET_DATA, retdata);
 					rets.put(Conts.KEY_RET_STATUS, CRSStatusEnum.STATUS_SUCCESS);

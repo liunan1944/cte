@@ -29,7 +29,7 @@ public interface IAccountService{
 	 * 测试账户扣除测试条数
 	 * @param score
 	 */
-	public boolean updateTestProd(String trade_id,String tag,String acct_id,String prod);
+	public void updateTestProd(String trade_id,String tag,String acct_id,String prod);
 	/**
 	 * 判断是否重复交易
 	 * @param score
