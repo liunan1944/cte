@@ -138,7 +138,7 @@ implements IDataSourceRequestor {
 						logObj.setState_msg(jixin.getErrtext());
 						logObj.setState_code(Conts.TRADE_STATE_SUCC);
 						
-						rets = buildJiXinResp(prefix,jixin);						
+						rets = buildJiXinResp(prefix,jixin,retdata);						
 					}						
 				}				
 			}						

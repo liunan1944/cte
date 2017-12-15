@@ -18,10 +18,10 @@ extends BaseDataSourceRequestor {
 	/**
 	 * 包装吉信返回结果
 	 * */
-	public Map<String, Object> buildJiXinResp(String prefix,Jixin_bank_result jixin){
+	public Map<String, Object> buildJiXinResp(String prefix,
+			Jixin_bank_result jixin,Map<String, Object> retdata){
 		logger.info("{} 吉信返回结果开始包装...", prefix);
 		Map<String, Object> rets = new HashMap<String, Object>();
-		Map<String, Object> retdata = new HashMap<String, Object>();
 
 		String resource_tag = Conts.TAG_SYS_ERROR;
 		if("0000".equals(jixin.getReturncode())){

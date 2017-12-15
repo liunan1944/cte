@@ -41,10 +41,10 @@ public class MainCTE001 {
 		System.out.println("请求交易号为:"+req_sn);
 		Map<String, Object> productDetailParam = new HashMap<>();
 		//产品入参
-		productDetailParam.put("name", "丰志浩");
-		productDetailParam.put("cardNo", "330824198211082315");
-		productDetailParam.put("cardId", "6222021001124486678");
-		productDetailParam.put("phone", "13918475863");
+		productDetailParam.put("name", "史校锋");
+		productDetailParam.put("cardNo", "360429198608211512");
+		productDetailParam.put("cardId", "6217001210022358806");
+//		productDetailParam.put("phone", "13918475863");
 		ProductDto productDto = new ProductDto();
 		productDto.setAcct_id(ACCOUNT_ID);
 		//产品编号
