@@ -50,9 +50,9 @@ public class PropertyTask {
 					PropertyUtil.properties=property_map;
 				}				
 			}
-			Jixin_bank_result jixin = new Jixin_bank_result();
-			jixin.setTrade_id("20171213180322159UJHY");
-			jixinService.queryJiXin(trade_id,jixin);
+//			Jixin_bank_result jixin = new Jixin_bank_result();
+//			jixin.setTrade_id("20171213180322159UJHY");
+//			jixinService.queryJiXin(trade_id,jixin);
 		}catch(Exception e){
 			logger.info("{} 加载系统变量任务异常!",trade_id);
 		}		

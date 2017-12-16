@@ -58,6 +58,9 @@ values (1000021,'sys_public_balance_customTods','routeDs:routeDs2=5:5','路由到ds
 insert into cpdb_ds.t_sys_property_param(id,key_code,key_value,key_desc,ownerid,child_code,child_name,status)
 values (1000022,'sys_public_balance_gwTocustom','routeCustom:routeCustom2=5:5','路由到custom应用-负载均衡','1q53513de038453c820c43569w327wsx','sys_public_code','系统参数-公用','3');
 
+insert into cpdb_ds.t_sys_property_param(id,key_code,key_value,key_desc,ownerid,child_code,child_name,status)
+values (1000023,'sys_redis_expire_seconds','172800','redis失效时间','1q53weqde038re33220cf6869w327wsx','sys_public_code','系统参数-公用','3');
+
 commit;
 
 

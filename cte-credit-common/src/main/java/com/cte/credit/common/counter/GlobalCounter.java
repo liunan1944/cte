@@ -196,6 +196,25 @@ public class GlobalCounter {
 		}
 	}
 	/**
+	 * 设置字符串
+	 * @param key
+	 * @param value
+	 * @param seconds 失效时间 单位秒
+	 * @throws ServiceException 
+	 */
+	public static  void setString(String key,String value,int seconds) throws ServiceException{
+		init();
+		ShardedJedis jedis = pool.getResource();
+		try {
+			jedis.set(key, value);
+			jedis.expire(key, seconds);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+	}
+	/**
 	 * 取得字符串
 	 * @param key
 	 * @return

@@ -24,6 +24,7 @@ import com.cte.credit.api.Conts;
 import com.cte.credit.api.dto.CRSCoreRequest;
 import com.cte.credit.api.dto.CRSCoreResponse;
 import com.cte.credit.api.enums.CRSStatusEnum;
+import com.cte.credit.common.counter.GlobalCounter;
 import com.cte.credit.common.log.prod.ProductLogUtil;
 import com.cte.credit.common.template.PropertyUtil;
 import com.cte.credit.common.util.ExceptionUtil;
@@ -121,13 +122,22 @@ public class CreditMainAction extends BaseServiceAction{
 							output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_PARAM.ret_msg);
 							output.put(Conts.KEY_RET_DATA, null);
 						}else{
-							if(acctEngine.isRepeatTrad(productDto.getRequest_sn(), 
-									acct_id, productDto.getProd_id())){	
+							String request_sn = productDto.getRequest_sn()+"-"+
+									acct_id+"-"+productDto.getProd_id();
+							if(!StringUtil.isEmpty(GlobalCounter.getString(request_sn))){
 								logger.info("{} 请求交易号重复{} {}",prefix,productDto.getProd_id(),productDto.getRequest_sn());			
 								output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_sub_code);
 								output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_msg);
 								output.put(Conts.KEY_RET_DATA, null);
-							}else{
+							}
+//							if(acctEngine.isRepeatTrad(productDto.getRequest_sn(), 
+//									acct_id, productDto.getProd_id())){	
+//								logger.info("{} 请求交易号重复{} {}",prefix,productDto.getProd_id(),productDto.getRequest_sn());			
+//								output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_sub_code);
+//								output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_msg);
+//								output.put(Conts.KEY_RET_DATA, null);
+//							}
+							else{
 								req = new CRSCoreRequest();
 								req.setRequst_sn(productDto.getRequest_sn());
 								req.setApi_key(account.getApi_key());
@@ -139,7 +149,7 @@ public class CreditMainAction extends BaseServiceAction{
 								req.setAcct_id(acct_id);
 								req.setParams(params);
 						        req.setProduct_id(productDto.getProd_id());
-						        prodLogEngine.writeReqLog(trade_id, req);
+						        prodLogEngine.writeReqLog(trade_id, req,request_sn);
 								resp = route2Next(trade_id,req);
 								formatOutPut(prefix,resp,
 										productDto.getRequest_sn(),output);

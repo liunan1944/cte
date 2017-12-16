@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import com.cte.credit.api.dto.CRSCoreRequest;
 import com.cte.credit.api.dto.CRSCoreResponse;
+import com.cte.credit.api.exception.ServiceException;
+import com.cte.credit.common.counter.GlobalCounter;
 import com.cte.credit.common.dao.DaoService;
 import com.cte.credit.common.template.PropertyUtil;
 import com.cte.credit.common.util.DESUtils;
@@ -35,8 +37,16 @@ public class ProductLogUtil {
 	PropertyUtil propertyEngine;
 
 	@Async
-	public void writeReqLog(final String trade_id,CRSCoreRequest req) {
+	public void writeReqLog(final String trade_id,CRSCoreRequest req,String redis_key) {
 		logger.info("{}交易请求保存开始...", trade_id);
+		int seconds = Integer.valueOf(propertyEngine.readById("sys_redis_expire_seconds"));
+		try {
+			logger.info("{}redis注册请求交易号:{}", trade_id,redis_key);
+			GlobalCounter.setString(redis_key, "1", seconds);
+		} catch (ServiceException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		final String encryptWords = propertyEngine.readById("sys_public_encode_keys");
 		final String des_key = propertyEngine.readById("sys_public_des_key");
 		String sql = "INSERT INTO CPDB_DS.T_SYS_REQ_HEADER("
