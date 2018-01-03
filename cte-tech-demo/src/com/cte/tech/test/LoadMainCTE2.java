@@ -53,7 +53,7 @@ public class LoadMainCTE2 {
 						System.out.println(i_run+"-"+j+" 请求交易号为:"+req_sn);
 						Map<String, Object> productDetailParam = new HashMap<>();
 						//产品入参
-						productDetailParam.put("name", "祝期");
+						productDetailParam.put("name", "张三");
 						productDetailParam.put("cardNo", "13092919850429467X");
 						productDetailParam.put("cardId", "6222024301081668996");
 						productDetailParam.put("phone", "15861824887");
