@@ -63,7 +63,7 @@ public class DectLineDemo4 {
 		
 		Mat open = new Mat();
 		Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, 
-				new Size(5,5));
+				new Size(6,6));
 		
 		Imgproc.morphologyEx(binary, open, Imgproc.MORPH_OPEN, 
 				kernel);
