@@ -19,8 +19,9 @@
     </RollingFile>    
   </appenders>    
   <loggers>    
- 	<AsyncLogger name="com" level="info" additivity="false" includeLocation="false">
-            <AppenderRef ref="RollingFile"/>   
-      </AsyncLogger>     
+ 	<root level="info">
+            <appender-ref ref="RollingFile"/> 
+            <appender-ref ref="Console"/>     
+      </root>     
   </loggers>    
 </configuration>  

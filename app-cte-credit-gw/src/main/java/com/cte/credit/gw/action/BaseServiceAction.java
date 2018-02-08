@@ -211,4 +211,14 @@ public class BaseServiceAction {
 		}
 		return false;
 	}
+	/**
+	 * 判断时间戳是否在有效时间内
+	 * */
+	public boolean isNowTime(long times){
+		long start_time = System.currentTimeMillis()-300000;
+		long end_time = System.currentTimeMillis()+300000;
+		if(times>=start_time && times<=end_time)
+			return true;
+		return false;
+	}
 }

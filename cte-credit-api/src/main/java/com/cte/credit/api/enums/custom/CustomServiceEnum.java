@@ -23,6 +23,19 @@ public enum CustomServiceEnum {
 			null,													 
 			null,
 			new String[] {},
+			null),
+	/**学历核查产品*/
+	EduQueryServiceImpl(
+			"CTE_007",                                                     
+			"最高学历查询产品",	   										    
+			0.0,															 
+			MethodType.synchronous,	
+			CustomType.nomal,
+			true,
+			new String[] { "name","cardNo"	},		
+			null,													 
+			null,
+			new String[] {},
 			null);
 
 	public String prod_code;			//产品ID

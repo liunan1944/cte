@@ -31,8 +31,8 @@ import com.cte.tech.util.CTEAES;
 public class MainCTE001 {
 
 	// TODO 请联系CTE员工提供相关的信息
-	public static String ACCOUNT_ID = "lnzcp_user";
-	public static String HEX_AES_128_PASSWORD = "5ffa26d0e9520a01e0530100007f7ee5";
+	public static String ACCOUNT_ID = "zhuyw_user";
+	public static String HEX_AES_128_PASSWORD = "64afc3bd76fb7a61e0530100007f0400";
 	public static String INVOKE_URI = "http://111.231.82.46:30000/app-cte-credit-gw/main/service";
     //超时时间设置10s
 	private static final int timeout = 10000;
@@ -48,8 +48,10 @@ public class MainCTE001 {
 		ProductDto productDto = new ProductDto();
 		productDto.setAcct_id(ACCOUNT_ID);
 		//产品编号
-		productDto.setProd_id("CTE_001");
-		productDto.setReq_time(System.currentTimeMillis());
+		productDto.setProd_id("CTE_006");
+		long time = System.currentTimeMillis();
+		System.out.println("请求时间戳:"+time);
+		productDto.setReq_time(time);
 		productDto.setRequest_sn(req_sn); //请保证这个id唯一
 		productDto.setReq_data(productDetailParam);
 		CTEAES cteAES = new CTEAES(Hex.decodeHex(HEX_AES_128_PASSWORD.toCharArray()));

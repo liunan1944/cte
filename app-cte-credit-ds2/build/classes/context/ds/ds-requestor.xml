@@ -32,4 +32,11 @@
 			<value>name,cardNo,cardId,phone</value>
 		</property>
 	</bean>
+	<!-- 数据源序号：4  数据源名称：万达学历数据源查询 -->
+	<bean name="ds_wanda_edu"
+		class="com.cte.credit.ds.client.wandaEdu.WandaEduRequestor">
+		<property name="paramIds">
+			<value>name,cardNo</value>
+		</property>
+	</bean>
 </beans>

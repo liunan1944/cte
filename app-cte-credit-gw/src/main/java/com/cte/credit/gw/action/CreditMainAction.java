@@ -103,6 +103,31 @@ public class CreditMainAction extends BaseServiceAction{
 					boolean isTestUser = false;
 					boolean testUserNormal = false;
 					logger.info("{} 获取权限校验完成",prefix);
+					Map<String,Object> params = productDto.getReq_data();
+					if(params == null || StringUtil.isEmpty(productDto.getRequest_sn())
+							|| productDto.getReq_time()==null){
+						logger.info("{} params,request_sn,req_time入参信息为空",prefix);
+						output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_PARAM.ret_sub_code);
+						output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_PARAM.ret_msg);
+						output.put(Conts.KEY_RET_DATA, null);
+						return output;
+					}
+					if(!isNowTime(productDto.getReq_time())){
+						logger.info("{} req_time时间戳失效",prefix);
+						output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_PARAM.ret_sub_code);
+						output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_PARAM.ret_msg);
+						output.put(Conts.KEY_RET_DATA, null);
+						return output;
+					}
+					String request_sn = productDto.getRequest_sn()+"-"+
+							acct_id+"-"+productDto.getProd_id();
+					if(!StringUtil.isEmpty(GlobalCounter.getString(request_sn))){
+						logger.info("{} 请求交易号重复{} {}",prefix,productDto.getProd_id(),productDto.getRequest_sn());			
+						output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_sub_code);
+						output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_msg);
+						output.put(Conts.KEY_RET_DATA, null);
+						return output;
+					}
 					if("1".equals(account.getIsfee())){//测试用户
 						isTestUser = true;
 						if(acctEngine.isTestUser(acct_id, productDto.getProd_id())){//测试用户,测试条数未用完
@@ -116,48 +141,24 @@ public class CreditMainAction extends BaseServiceAction{
 						output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_PROD_TEST_FAILED.ret_msg);
 						output.put(Conts.KEY_RET_DATA, null);
 					}else{
-						Map<String,Object> params = productDto.getReq_data();
-						if(params == null || StringUtil.isEmpty(productDto.getRequest_sn())){
-							output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_PARAM.ret_sub_code);
-							output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_PARAM.ret_msg);
-							output.put(Conts.KEY_RET_DATA, null);
-						}else{
-							String request_sn = productDto.getRequest_sn()+"-"+
-									acct_id+"-"+productDto.getProd_id();
-							if(!StringUtil.isEmpty(GlobalCounter.getString(request_sn))){
-								logger.info("{} 请求交易号重复{} {}",prefix,productDto.getProd_id(),productDto.getRequest_sn());			
-								output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_sub_code);
-								output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_msg);
-								output.put(Conts.KEY_RET_DATA, null);
-							}
-//							if(acctEngine.isRepeatTrad(productDto.getRequest_sn(), 
-//									acct_id, productDto.getProd_id())){	
-//								logger.info("{} 请求交易号重复{} {}",prefix,productDto.getProd_id(),productDto.getRequest_sn());			
-//								output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_sub_code);
-//								output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_APP_REQEUST_SN.ret_msg);
-//								output.put(Conts.KEY_RET_DATA, null);
-//							}
-							else{
-								req = new CRSCoreRequest();
-								req.setRequst_sn(productDto.getRequest_sn());
-								req.setApi_key(account.getApi_key());
-								req.setIp_address(remoteIp);
-								req.setOperid(Conts.SUPPORT_OPER_ID);
-								req.setProdId(productDto.getProd_id());
-								req.setVersion(Conts.WS_VERSION);
-								req.setMac_address("UNKOWN");
-								req.setAcct_id(acct_id);
-								req.setParams(params);
-						        req.setProduct_id(productDto.getProd_id());
-						        prodLogEngine.writeReqLog(trade_id, req,request_sn);
-								resp = route2Next(trade_id,req);
-								formatOutPut(prefix,resp,
-										productDto.getRequest_sn(),output);
-								prodLogEngine.writeRspLog(trade_id, 
-										productDto.getProd_id(), resp, 
-										new Date().getTime()-startTime);
-							}						
-						}
+						req = new CRSCoreRequest();
+						req.setRequst_sn(productDto.getRequest_sn());
+						req.setApi_key(account.getApi_key());
+						req.setIp_address(remoteIp);
+						req.setOperid(Conts.SUPPORT_OPER_ID);
+						req.setProdId(productDto.getProd_id());
+						req.setVersion(Conts.WS_VERSION);
+						req.setMac_address("UNKOWN");
+						req.setAcct_id(acct_id);
+						req.setParams(params);
+				        req.setProduct_id(productDto.getProd_id());
+				        prodLogEngine.writeReqLog(trade_id, req,request_sn);
+						resp = route2Next(trade_id,req);
+						formatOutPut(prefix,resp,
+								productDto.getRequest_sn(),output);
+						prodLogEngine.writeRspLog(trade_id, 
+								productDto.getProd_id(), resp, 
+								new Date().getTime()-startTime);						
 					}					
 				}															
 			} catch (DecoderException e) {
