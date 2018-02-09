@@ -43,7 +43,7 @@ implements IDataSourceRequestor {
 	@Override
 	public Map<String, Object> request(String trade_id, DataSource ds){
 		final String prefix = trade_id + " " + Conts.KEY_SYS_AGENT_HEADER;
-		logger.info("{}吉信106三要素数据源查询开始...", prefix);
+		logger.info("{}万达学历数据源查询开始...", prefix);
 		String des_key = propertyEngine.readById("sys_public_des_key");//加密key
 		boolean jixin_106mock = "1".equals(propertyEngine.readById("sys_ds_jixin_106mock"));//1走mock接口
 		boolean doPrint = "1".equals(propertyEngine.readById("sys_public_logprint_switch"));
@@ -82,8 +82,6 @@ implements IDataSourceRequestor {
 				return rets;
 			}else{
 				logObj.setState_msg("处理成功");
-				retdata.put("name", name);
-				retdata.put("cardNo", cardNo);
 				if(jixin_106mock){
 					logger.warn("{} 学历走mock!", prefix);
 					resource_tag = Conts.TAG_MATCH;
@@ -92,6 +90,7 @@ implements IDataSourceRequestor {
 					rets.put(Conts.KEY_RET_STATUS, CRSStatusEnum.STATUS_SUCCESS);
 					rets.put(Conts.KEY_RET_MSG, "采集成功!");
 				}else{
+					logger.info("{}万达学历数据源-入参包装...", prefix);
 					String req_sn = UUID.randomUUID().toString().replace("-", "");
 					Map<String, Object> productDetailParam = new HashMap<String, Object>();
 					//产品入参
@@ -109,6 +108,7 @@ implements IDataSourceRequestor {
 					if(doPrint)
 						logger.info("{} 万达调用返回信息：{}",prefix,rsp040);
 					if(StringUtil.isEmpty(rsp040)){
+						logger.info("{}万达学历数据源返回信息为空", prefix);
 						resource_tag = Conts.TAG_TST_FAIL;
 						rets.put(Conts.KEY_RET_STATUS, CRSStatusEnum.STATUS_FAILED_DS_EDU_EXCEPTION);
 						rets.put(Conts.KEY_RET_MSG, "学历查询返回失败");
@@ -128,11 +128,13 @@ implements IDataSourceRequestor {
 					logObj.setState_code(Conts.TRADE_STATE_SUCC);
 					eduService.batchSave(trade_id, rsp040, req_sn,
 							String.valueOf(json.get("response_sn")));
-					if("000000".equals(String.valueOf(json.get("retcode")))){											
-						if("0".equals(String.valueOf(json.get("edu_result")))){//查得学历
-							JSONObject college = JSONObject.parseObject(String.valueOf(json.get("college")));
-							JSONObject degree = JSONObject.parseObject(String.valueOf(json.get("degree")));
-							JSONObject personBase = JSONObject.parseObject(String.valueOf(json.get("personBase")));
+					if("000000".equals(String.valueOf(json.get("retcode")))){
+						logger.info("{}万达学历数据源查询信息成功", prefix);
+						JSONObject ret_data = JSONObject.parseObject(String.valueOf(json.get("retdata")));
+						if("0".equals(String.valueOf(ret_data.get("edu_result")))){//查得学历
+							JSONObject college = JSONObject.parseObject(String.valueOf(ret_data.get("college")));
+							JSONObject degree = JSONObject.parseObject(String.valueOf(ret_data.get("degree")));
+							JSONObject personBase = JSONObject.parseObject(String.valueOf(ret_data.get("personBase")));
 							retdata.put("degree", degree.get("degree")!=null?degree.get("degree"):"");
 							retdata.put("college", college.get("college")!=null?college.get("college"):"");
 							retdata.put("graduateTime", degree.get("graduateTime")!=null?degree.get("graduateTime"):"");
@@ -142,6 +144,7 @@ implements IDataSourceRequestor {
 							retdata.put("studyResult", degree.get("studyResult")!=null?degree.get("studyResult"):"");
 							retdata.put("is_edu", "0");	
 						}else{
+							logger.info("{}万达学历数据源查询未查得学历", prefix);
 							retdata.put("degree", "");
 							retdata.put("college", "");
 							retdata.put("graduateTime", "");
@@ -150,7 +153,6 @@ implements IDataSourceRequestor {
 							retdata.put("studyType", "");
 							retdata.put("studyResult", "");
 							retdata.put("is_edu", "1");
-							return rets;
 						}	
 						resource_tag = Conts.TAG_TST_SUCCESS;	
 						rets.put(Conts.KEY_RET_TAG, resource_tag);
@@ -158,6 +160,7 @@ implements IDataSourceRequestor {
 						rets.put(Conts.KEY_RET_STATUS, CRSStatusEnum.STATUS_SUCCESS);
 						rets.put(Conts.KEY_RET_MSG, "采集成功!");
 					}else{
+						logger.info("{}万达学历数据源查询信息失败", prefix);
 						resource_tag = Conts.TAG_TST_FAIL;
 						rets.put(Conts.KEY_RET_STATUS, CRSStatusEnum.STATUS_FAILED_DS_EDU_EXCEPTION);
 						rets.put(Conts.KEY_RET_MSG, "学历查询返回失败");

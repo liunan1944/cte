@@ -41,14 +41,14 @@ public class MainCTE001 {
 		System.out.println("请求交易号为:"+req_sn);
 		Map<String, Object> productDetailParam = new HashMap<>();
 		//产品入参
-		productDetailParam.put("name", "成周");
-		productDetailParam.put("cardNo", "320623198610171877");
-		productDetailParam.put("cardId", "6226220287878408");
-		productDetailParam.put("phone", "18221593341");
+		productDetailParam.put("name", "陈赛");
+		productDetailParam.put("cardNo", "320681198904226048");
+//		productDetailParam.put("cardId", "6226220287878408");
+//		productDetailParam.put("phone", "18221593341");
 		ProductDto productDto = new ProductDto();
 		productDto.setAcct_id(ACCOUNT_ID);
 		//产品编号
-		productDto.setProd_id("CTE_006");
+		productDto.setProd_id("CTE_007");
 		long time = System.currentTimeMillis();
 		System.out.println("请求时间戳:"+time);
 		productDto.setReq_time(time);
