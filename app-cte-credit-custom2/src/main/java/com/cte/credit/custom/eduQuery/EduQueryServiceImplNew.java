@@ -2,6 +2,7 @@ package com.cte.credit.custom.eduQuery;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +61,7 @@ public class EduQueryServiceImplNew extends BaseCustomCoreService
 			}
 			logger.info("{} 开始请求学历查询产品:{}", prefix,ds_jixin_bank3);
 			
-			Map<String, Object> retdata = new HashMap<String, Object>();
+			Map<String, Object> retdata = new TreeMap<String, Object>();
 			Map<String,Object> params_in = new HashMap<String,Object>();
 			params_in.put("name", name);
 			params_in.put("cardNo", cardNo);

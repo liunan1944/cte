@@ -59,7 +59,7 @@ implements IDataSourceRequestor {
 		logObj.setDs_id(ds.getId());
 		logObj.setIncache("0");
 		TreeMap<String, Object> retdata = new TreeMap<String, Object>();
-		Map<String, Object> rets = new HashMap<String, Object>();
+		Map<String, Object> rets = new TreeMap<String, Object>();
 		String resource_tag = Conts.TAG_SYS_ERROR;
 		String enCardNo = "";
 		try{	
@@ -135,24 +135,24 @@ implements IDataSourceRequestor {
 							JSONObject college = JSONObject.parseObject(String.valueOf(ret_data.get("college")));
 							JSONObject degree = JSONObject.parseObject(String.valueOf(ret_data.get("degree")));
 							JSONObject personBase = JSONObject.parseObject(String.valueOf(ret_data.get("personBase")));
+							retdata.put("is_edu", "0");	
 							retdata.put("degree", degree.get("degree")!=null?degree.get("degree"):"");
 							retdata.put("college", college.get("college")!=null?college.get("college"):"");
 							retdata.put("graduateTime", degree.get("graduateTime")!=null?degree.get("graduateTime"):"");
 							retdata.put("graduateYears", personBase.get("graduateYears")!=null?personBase.get("graduateYears"):"");
 							retdata.put("studyStyle", degree.get("studyStyle")!=null?degree.get("studyStyle"):"");
 							retdata.put("studyType", degree.get("studyType")!=null?degree.get("studyType"):"");
-							retdata.put("studyResult", degree.get("studyResult")!=null?degree.get("studyResult"):"");
-							retdata.put("is_edu", "0");	
+							retdata.put("studyResult", degree.get("studyResult")!=null?degree.get("studyResult"):"");							
 						}else{
 							logger.info("{}万达学历数据源查询未查得学历", prefix);
+							retdata.put("is_edu", "1");
 							retdata.put("degree", "");
 							retdata.put("college", "");
 							retdata.put("graduateTime", "");
 							retdata.put("graduateYears", "");
 							retdata.put("studyStyle", "");
 							retdata.put("studyType", "");
-							retdata.put("studyResult", "");
-							retdata.put("is_edu", "1");
+							retdata.put("studyResult", "");						
 						}	
 						resource_tag = Conts.TAG_TST_SUCCESS;	
 						rets.put(Conts.KEY_RET_TAG, resource_tag);

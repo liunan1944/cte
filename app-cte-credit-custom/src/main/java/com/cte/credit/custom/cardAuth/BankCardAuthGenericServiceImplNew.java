@@ -2,6 +2,7 @@ package com.cte.credit.custom.cardAuth;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +83,7 @@ public class BankCardAuthGenericServiceImplNew extends BaseCustomCoreService
 			}
 			logger.info("{} 开始请求银行卡鉴权产品:{}", prefix,ds_id);
 			
-			Map<String, Object> retdata = new HashMap<String, Object>();
+			Map<String, Object> retdata = new TreeMap<String, Object>();
 			Map<String,Object> params_in = new HashMap<String,Object>();
 			params_in.put("name", name);
 			params_in.put("cardNo", cardNo);

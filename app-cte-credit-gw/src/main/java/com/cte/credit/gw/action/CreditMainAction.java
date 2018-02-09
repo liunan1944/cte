@@ -3,6 +3,7 @@ package com.cte.credit.gw.action;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +65,7 @@ public class CreditMainAction extends BaseServiceAction{
 		CRSCoreResponse resp = null;
 		String acct_id = "";
 		Account account = null;
-		Map<String,Object> output = new HashMap<String,Object>();
+		Map<String,Object> output = new TreeMap<String,Object>();
 		try {
 			acct_id = request.getHeader("X_CTE_ACCT_ID");
 			logger.info("{} 获取账户信息为:{}",prefix,acct_id);

@@ -63,7 +63,7 @@ implements IDataSourceRequestor {
 		logObj.setDs_id(ds.getId());
 		logObj.setIncache("0");
 		TreeMap<String, Object> retdata = new TreeMap<String, Object>();
-		Map<String, Object> rets = new HashMap<String, Object>();
+		Map<String, Object> rets = new TreeMap<String, Object>();
 		String resource_tag = Conts.TAG_SYS_ERROR;
 		String enCardNo = "";
 		String enCardId = "";
