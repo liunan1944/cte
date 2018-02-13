@@ -31,8 +31,8 @@ import com.cte.tech.util.CTEAES;
 public class MainCTE007 {
 
 	// TODO 请联系CTE员工提供相关的信息
-	public static String ACCOUNT_ID = "cijinr_user";
-	public static String HEX_AES_128_PASSWORD = "64fa07ab4a244bd0e0530100007ff734";
+	public static String ACCOUNT_ID = "zhuyw_user";
+	public static String HEX_AES_128_PASSWORD = "64afc3bd76fb7a61e0530100007f0400";
 	public static String INVOKE_URI = "http://111.231.82.46:30000/app-cte-credit-gw/main/service";
     //超时时间设置10s
 	private static final int timeout = 10000;
@@ -42,7 +42,7 @@ public class MainCTE007 {
 		Map<String, Object> productDetailParam = new HashMap<>();
 		//产品入参
 		productDetailParam.put("name", "陈赛");
-		productDetailParam.put("cardNo", "320681198904226048");
+		productDetailParam.put("cardNo", "3206811935904226048");
 //		productDetailParam.put("cardId", "6226220287878408");
 //		productDetailParam.put("phone", "18221593341");
 		ProductDto productDto = new ProductDto();

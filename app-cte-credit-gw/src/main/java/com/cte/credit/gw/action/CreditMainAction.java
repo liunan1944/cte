@@ -140,6 +140,7 @@ public class CreditMainAction extends BaseServiceAction{
 					}else if("0".equals(account.getIsfee())){
 						isOnlineUser = true;
 						if(acctEngine.isOnlineUser(acct_id, productDto.getProd_id())){
+							logger.info("{} 正式用户有可用计费量",prefix);
 							onlineUserNormal = true;
 						}						
 					}
@@ -176,6 +177,7 @@ public class CreditMainAction extends BaseServiceAction{
 								new Date().getTime()-startTime);
 						if("0".equals(account.getIsfee())){
 							if(isPayTag(resp.getIface_tags(),productDto.getProd_id(),acct_id)){
+								logger.info("{} 正式用户,扣除计费条数:{}",prefix,acct_id);
 								acctEngine.updateTestProd(trade_id,acct_id, productDto.getProd_id());
 							}
 						}

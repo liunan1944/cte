@@ -204,6 +204,9 @@ public class BaseServiceAction {
 	 * 判断标签是否需要扣费
 	 * */
 	public boolean isPayTag(String iface_tag,String prod,String acct_id){
+		if(StringUtil.isEmpty(iface_tag) || StringUtil.isEmpty(prod)
+				||StringUtil.isEmpty(acct_id))
+			return false;
 		for(ProdLimit prods:AccountInitUtil.prodLimitList){
 			if(prod.equals(prods.getProd_limit()) 
 					&& acct_id.equals(prods.getAcct_id())){
