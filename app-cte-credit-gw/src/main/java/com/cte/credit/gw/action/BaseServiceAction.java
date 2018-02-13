@@ -203,12 +203,18 @@ public class BaseServiceAction {
 	/**
 	 * 判断标签是否需要扣费
 	 * */
-	public boolean isPayTag(String iface_tag,String prod_tags){
-		for(String tag:prod_tags.split(",")){
-			if(iface_tag.equals(tag)){
-				return true;
+	public boolean isPayTag(String iface_tag,String prod,String acct_id){
+		for(ProdLimit prods:AccountInitUtil.prodLimitList){
+			if(prod.equals(prods.getProd_limit()) 
+					&& acct_id.equals(prods.getAcct_id())){
+				for(String tag:prods.getPay_tags().split(",")){
+					if(iface_tag.equals(tag)){
+						return true;
+					}
+				}
 			}
 		}
+		
 		return false;
 	}
 	/**

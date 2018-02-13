@@ -8,6 +8,7 @@ package com.cte.credit.common.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
@@ -204,6 +205,76 @@ public class CardNoValidator  {
     }
 
     /**
+     * 功能：根据身份证号输出年龄 
+     * @param str
+     * @return
+     */
+    public static int IdNOToAge(String IdNO){
+ 	   int ageAdd = -1;
+        int leh = IdNO.length();
+        String year="";
+        String month = "";
+        String today = "";
+        Date new_date = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+        String date_new = df.format(new_date);
+        String year_new = date_new.substring(0, 4);
+        String mm=date_new.substring(4, 6);
+        String dd=date_new.substring(6, 8);
+        if (leh < 18) {
+     	   year = "19"+IdNO.substring(6, 8);  
+            month = IdNO.substring(8, 10); 
+            today = IdNO.substring(10, 12);
+        }else{
+     	   year = IdNO.substring(6, 10);  
+            month = IdNO.substring(10, 12); 
+            today = IdNO.substring(12, 14);
+        }       
+        int u=Integer.parseInt(year_new)-Integer.parseInt(year);
+        if(Integer.parseInt(mm)>=Integer.parseInt(month)){
+     	   if(Integer.parseInt(dd)>=Integer.parseInt(today)){
+     		   ageAdd = ageAdd+1;
+            }  
+        }
+        return u+ageAdd;
+    }
+    /**
+     * 功能：根据身份证号输出性别
+     * @param str
+     * @return
+     */
+    public static String IdNOToSex(String cardNo){
+    	int lengthStr = cardNo.length();
+		String gender="";
+		if(lengthStr == 15){
+			if (Integer.parseInt(cardNo.substring(14, 15)) % 2 != 0)
+				gender = "1";
+			else
+				gender = "2";
+		}else{
+			if (Integer.parseInt(cardNo.substring(16, 17)) % 2 != 0)
+				gender = "1";
+			else
+				gender = "2";
+		}
+		return gender;
+    }
+    /**
+     * 功能：根据身份证号获取生日
+     * @param str
+     * @return
+     */
+    public static String IdNOToBirth(String cardNo){
+    	int lengthStr = cardNo.length();
+		String birthDays="";
+		if(lengthStr == 15){
+			birthDays="19"+cardNo.substring(6, 12);
+		}else{
+			birthDays=cardNo.substring(6, 14);
+		}
+		return birthDays;
+    }
+    /**
      * @param args
      * @throws ParseException
      */
@@ -214,7 +285,7 @@ public class CardNoValidator  {
 		IDCardNum = "53262819820314783x";
 //		IDCardNum = "210181198807193116";
 		String result = CardNoValidator.validate(IDCardNum);
-		
+		System.out.println("年龄:"+CardNoValidator.IdNOToAge(IDCardNum));
 		if ("".equals(result)) {
 			System.out.println("验证成功");
 		}else{

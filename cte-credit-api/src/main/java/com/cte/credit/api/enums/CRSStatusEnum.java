@@ -14,6 +14,7 @@ public enum CRSStatusEnum {
 	STATUS_SYS_PROD_TEST_FAILED	("-99999","200012","此产品测试条数已用完","建议联系CTE公司人员"),
 	STATUS_SYS_ACCT_LOCK		("-99999","200013","账号冻结，请联系相关CTE公司人员","建议联系CTE公司人员"),
 	STATUS_SYS_ACCT_KEY		("-99999","200014","账号信息错误","建议联系CTE公司人员"),
+	STATUS_SYS_ACCT_COST_LOCK	("-99999","200016","余额不足","建议联系CTE公司人员"),
 	
 	STATUS_FAILED_SYS_ACCT_OUTOFBALANCE("-99999","err_001","您的账户余额不足!","建议联系CTE公司人员"),
 	STATUS_FAILED_SYS_ACCT_NOTEXISTS_KEYINVALID("-99999","err_002","您的账户不存在或未被授权!","建议联系CTE公司人员"),

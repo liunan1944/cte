@@ -102,7 +102,9 @@ public class CreditMainAction extends BaseServiceAction{
 					output.put(Conts.KEY_RET_DATA, null);
 				}else{
 					boolean isTestUser = false;
+					boolean isOnlineUser = false;
 					boolean testUserNormal = false;
+					boolean onlineUserNormal = false;
 					logger.info("{} 获取权限校验完成",prefix);
 					Map<String,Object> params = productDto.getReq_data();
 					if(params == null || StringUtil.isEmpty(productDto.getRequest_sn())
@@ -135,6 +137,18 @@ public class CreditMainAction extends BaseServiceAction{
 							logger.info("{} 测试用户,扣除测试条数:{}",prefix,acct_id);
 							testUserNormal = true;
 						}
+					}else if("0".equals(account.getIsfee())){
+						isOnlineUser = true;
+						if(acctEngine.isOnlineUser(acct_id, productDto.getProd_id())){
+							onlineUserNormal = true;
+						}						
+					}
+					if(isOnlineUser && !onlineUserNormal){
+						logger.info("{} 正式用户条数已用完",prefix);
+						output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_ACCT_COST_LOCK.ret_sub_code);
+						output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_ACCT_COST_LOCK.ret_msg);
+						output.put(Conts.KEY_RET_DATA, null);
+						return output;
 					}
 					if(isTestUser && !testUserNormal){//测试用户,测试条数已用完
 						logger.info("{} 测试条数已用完",prefix);
@@ -159,7 +173,12 @@ public class CreditMainAction extends BaseServiceAction{
 								productDto.getRequest_sn(),output);
 						prodLogEngine.writeRspLog(trade_id, 
 								productDto.getProd_id(), resp, 
-								new Date().getTime()-startTime);						
+								new Date().getTime()-startTime);
+						if("0".equals(account.getIsfee())){
+							if(isPayTag(resp.getIface_tags(),productDto.getProd_id(),acct_id)){
+								acctEngine.updateTestProd(trade_id,acct_id, productDto.getProd_id());
+							}
+						}
 					}					
 				}															
 			} catch (DecoderException e) {
