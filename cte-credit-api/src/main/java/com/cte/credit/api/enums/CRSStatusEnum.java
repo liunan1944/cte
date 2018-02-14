@@ -11,7 +11,7 @@ public enum CRSStatusEnum {
 	STATUS_SYS_APP_FAILED		("-99999","200000","调用远程系统异常","建议联系CTE公司人员"),
 	STATUS_SYS_ACCT_FAILED		("-99999","200010","用户不存在或状态不存在","建议联系CTE公司人员"),
 	STATUS_SYS_PROD_FAILED		("-99999","200011","用户没有找到产品的订购关系","建议联系CTE公司人员"),
-	STATUS_SYS_PROD_TEST_FAILED	("-99999","200012","此产品测试条数已用完","建议联系CTE公司人员"),
+	STATUS_SYS_PROD_TEST_FAILED	("-99999","200012","授信条数已用完","建议联系CTE公司人员"),
 	STATUS_SYS_ACCT_LOCK		("-99999","200013","账号冻结，请联系相关CTE公司人员","建议联系CTE公司人员"),
 	STATUS_SYS_ACCT_KEY		("-99999","200014","账号信息错误","建议联系CTE公司人员"),
 	STATUS_SYS_ACCT_COST_LOCK	("-99999","200016","余额不足","建议联系CTE公司人员"),

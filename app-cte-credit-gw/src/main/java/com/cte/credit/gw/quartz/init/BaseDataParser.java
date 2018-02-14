@@ -28,7 +28,7 @@ public class BaseDataParser {
 	}
 
 	public List<Map<String, Object>> queryAcctProds(String acct_id){
-		String sql = " select d.acct_id,d.prod_limit,d.price,d.status,d.test_num,d.pay_tags from "
+		String sql = " select d.acct_id,d.prod_limit,d.price,d.status,d.test_num,d.pay_tags,d.listen_num from "
 				+ " cpdb_ds.t_sys_acct_prods d where d.acct_id=? ";
 		List<Map<String, Object>> result = this.daoService.getJdbcTemplate().queryForList(sql,acct_id);
 		return result;

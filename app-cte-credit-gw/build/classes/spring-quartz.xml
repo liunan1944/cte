@@ -20,6 +20,15 @@
 		<property name="targetMethod" value="exec"/>
 	</bean> 
 	
+	<!-- 账户预警任务-->
+	<bean id="listenAcctTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<bean class="com.cte.credit.gw.quartz.ListenAcctTask"/>
+		</property>
+		<property name="targetMethod" value="exec"/>
+	</bean>
+	
 	<!-- 账户信息任务 定时触发 --> 
 	<bean id="acctCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="accountTask"/>
@@ -32,11 +41,18 @@
 		<property name="cronExpression" value="0 0/5 * * * ?"/>	<!--每5分钟进行触发 -->
 	</bean>
 	
+	<!-- 账户预警加载任务 定时触发 --> 
+	<bean id="listenAcctTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="listenAcctTask"/>
+		<property name="cronExpression" value="0 0/5 * * * ?"/>	<!--每5分钟进行触发 -->
+	</bean>
+	
 	<bean id="fBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>	
 				<ref bean="acctCronTrigger"/>
 				<ref bean="propertyCronTrigger"/>
+				<ref bean="listenAcctTrigger"/>
 			</list>
 		</property>
 	</bean>
