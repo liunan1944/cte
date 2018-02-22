@@ -168,7 +168,7 @@ public class CreditMainAction extends BaseServiceAction{
 						req.setAcct_id(acct_id);
 						req.setParams(params);
 				        req.setProduct_id(productDto.getProd_id());
-				        prodLogEngine.writeReqLog(trade_id, req,request_sn);
+				        prodLogEngine.writeReqLog(trade_id, req,request_sn,account.getIsfee());
 						resp = route2Next(trade_id,req);
 						formatOutPut(prefix,resp,
 								productDto.getRequest_sn(),output);
