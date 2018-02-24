@@ -37,7 +37,7 @@ public class ProductLogUtil {
 	PropertyUtil propertyEngine;
 
 	@Async
-	public void writeReqLog(final String trade_id,CRSCoreRequest req,String redis_key) {
+	public void writeReqLog(final String trade_id,CRSCoreRequest req,String redis_key,String is_fee) {
 		logger.info("{}交易请求保存开始...", trade_id);
 		int seconds = Integer.valueOf(propertyEngine.readById("sys_redis_expire_seconds"));
 		try {
@@ -59,7 +59,8 @@ public class ProductLogUtil {
 				+ "IP_ADDRESS ,"
 				+ "OPERID ,"
 				+ "REQ_TIME ,"
-				+ "PROD_ID) VALUES(CPDB_DS.SEQ_SYS_REQ_HEADER.NEXTVAL,?,?,?,?,?,?,?,?,?)";
+				+ "PROD_ID,"
+				+ "IS_FEE) VALUES(CPDB_DS.SEQ_SYS_REQ_HEADER.NEXTVAL,?,?,?,?,?,?,?,?,?,?)";
 		this.daoService.getJdbcTemplate().update(sql, new Object[]{	
 				req.getRequst_sn(),
 				trade_id,
@@ -69,7 +70,8 @@ public class ProductLogUtil {
 				req.getIp_address(),
 				req.getOperid(),
 				new Date(),
-				req.getProdId()	
+				req.getProdId(),
+				is_fee
 		});
 		if(req.getParams()!=null){
 			sql = "INSERT INTO CPDB_DS.T_SYS_REQ_PARAM(ID,TRADE_ID,KEY_CODE,VALUE) "

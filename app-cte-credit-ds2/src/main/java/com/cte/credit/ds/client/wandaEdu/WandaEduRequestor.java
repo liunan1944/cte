@@ -53,7 +53,7 @@ implements IDataSourceRequestor {
 		String key = propertyEngine.readById("sys_ds_wanda_key");
 		String prod040 = propertyEngine.readById("sys_ds_wanda_prod040");
 		int timeout = Integer.valueOf(propertyEngine.readById("sys_public_env_timeout"));
-		
+		logger.warn("{}加载系统变量值:{}", prefix,account+","+key);
 		DataSourceLogVO logObj = new DataSourceLogVO();
 		Map<String, Object> reqparam = new HashMap<String, Object>();
 		logObj.setReq_time(new Timestamp(System.currentTimeMillis()));//log请求时间

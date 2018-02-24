@@ -8,7 +8,7 @@ public class ProdLimit{
 	private Double price;
 	private int test_num;
 	private String pay_tags;
-
+	private String isfee;
 
 	public String getAcct_id() {
 		return acct_id;
@@ -45,6 +45,12 @@ public class ProdLimit{
 	}
 	public void setPay_tags(String pay_tags) {
 		this.pay_tags = pay_tags;
+	}
+	public String getIsfee() {
+		return isfee;
+	}
+	public void setIsfee(String isfee) {
+		this.isfee = isfee;
 	}
 	
 }

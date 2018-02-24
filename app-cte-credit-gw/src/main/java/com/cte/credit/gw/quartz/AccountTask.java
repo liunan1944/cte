@@ -64,6 +64,7 @@ public class AccountTask {
 						prod_tmp.setTest_num(map1.get("TEST_NUM")!=null?
 								Integer.valueOf(String.valueOf(map1.get("TEST_NUM"))):0);
 						prod_tmp.setStatus(map1.get("STATUS")!=null?String.valueOf(map1.get("STATUS")):"");
+						prod_tmp.setIsfee(map1.get("ISFEE")!=null?String.valueOf(map1.get("ISFEE")):"");
 						AccountInitUtil.prodLimitList.add(prod_tmp);
 					}
 					logger.info("{} 初始化账户产品列表权限信息加载完成",trade_id);

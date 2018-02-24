@@ -74,6 +74,7 @@ public class AccountInitUtil {
 						prod_tmp.setTest_num(map1.get("TEST_NUM")!=null?
 								Integer.valueOf(String.valueOf(map1.get("TEST_NUM"))):0);
 						prod_tmp.setStatus(map1.get("STATUS")!=null?String.valueOf(map1.get("STATUS")):"");
+						prod_tmp.setIsfee(map1.get("ISFEE")!=null?String.valueOf(map1.get("ISFEE")):"");
 						logger.info("初始化账户产品列表信息02:{}",JSON.toJSONString(prod_tmp));
 						prodLimitList.add(prod_tmp);
 					}

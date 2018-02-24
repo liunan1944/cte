@@ -31,8 +31,8 @@ import com.cte.tech.util.CTEAES;
 public class MainCTE001 {
 
 	// TODO 请联系CTE员工提供相关的信息
-	public static String ACCOUNT_ID = "cijinr_user";
-	public static String HEX_AES_128_PASSWORD = "64fa07ab4a244bd0e0530100007ff734";
+	public static String ACCOUNT_ID = "lnzcp_user";
+	public static String HEX_AES_128_PASSWORD = "5ffa26d0e9520a01e0530100007f7ee5";
 	public static String INVOKE_URI = "http://111.231.82.46:30000/app-cte-credit-gw/main/service";
     //超时时间设置10s
 	private static final int timeout = 10000;

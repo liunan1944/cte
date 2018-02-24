@@ -41,8 +41,8 @@ public class MainCTE007 {
 		System.out.println("请求交易号为:"+req_sn);
 		Map<String, Object> productDetailParam = new HashMap<>();
 		//产品入参
-		productDetailParam.put("name", "陈赛");
-		productDetailParam.put("cardNo", "3206811935904226048");
+		productDetailParam.put("name", "李敏");
+		productDetailParam.put("cardNo", "360733198505030031");
 //		productDetailParam.put("cardId", "6226220287878408");
 //		productDetailParam.put("phone", "18221593341");
 		ProductDto productDto = new ProductDto();

@@ -37,6 +37,7 @@ import com.cte.credit.gw.action.dto.ProductDto;
 import com.cte.credit.gw.action.dto.Request;
 import com.cte.credit.gw.dao.iface.IAccountService;
 import com.cte.credit.gw.dto.Account;
+import com.cte.credit.gw.dto.ProdLimit;
 import com.cte.credit.gw.quartz.init.AccountInitUtil;
 
 
@@ -131,21 +132,22 @@ public class CreditMainAction extends BaseServiceAction{
 						output.put(Conts.KEY_RET_DATA, null);
 						return output;
 					}
-					if("1".equals(account.getIsfee())){//测试用户
+					ProdLimit prod_obj = matchProd(acct_id,productDto.getProd_id());
+					if("1".equals(prod_obj.getIsfee())){//测试用户
 						isTestUser = true;
 						if(acctEngine.isTestUser(acct_id, productDto.getProd_id())){//测试用户,测试条数未用完
-							logger.info("{} 测试用户,扣除测试条数:{}",prefix,acct_id);
+							logger.info("{} 测试用户产品,扣除测试条数:{}",prefix,acct_id);
 							testUserNormal = true;
 						}
-					}else if("0".equals(account.getIsfee())){
+					}else if("0".equals(prod_obj.getIsfee())){
 						isOnlineUser = true;
 						if(acctEngine.isOnlineUser(acct_id, productDto.getProd_id())){
-							logger.info("{} 正式用户有可用计费量",prefix);
+							logger.info("{} 正式用户产品有可用计费量",prefix);
 							onlineUserNormal = true;
 						}						
 					}
 					if(isOnlineUser && !onlineUserNormal){
-						logger.info("{} 正式用户条数已用完",prefix);
+						logger.info("{} 正式用户产品条数已用完",prefix);
 						output.put(Conts.KEY_RET_CODE, CRSStatusEnum.STATUS_SYS_ACCT_COST_LOCK.ret_sub_code);
 						output.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_SYS_ACCT_COST_LOCK.ret_msg);
 						output.put(Conts.KEY_RET_DATA, null);
@@ -168,16 +170,16 @@ public class CreditMainAction extends BaseServiceAction{
 						req.setAcct_id(acct_id);
 						req.setParams(params);
 				        req.setProduct_id(productDto.getProd_id());
-				        prodLogEngine.writeReqLog(trade_id, req,request_sn,account.getIsfee());
+				        prodLogEngine.writeReqLog(trade_id, req,request_sn,prod_obj.getIsfee());
 						resp = route2Next(trade_id,req);
 						formatOutPut(prefix,resp,
 								productDto.getRequest_sn(),output);
 						prodLogEngine.writeRspLog(trade_id, 
 								productDto.getProd_id(), resp, 
 								new Date().getTime()-startTime);
-						if("0".equals(account.getIsfee())){
+						if("0".equals(prod_obj.getIsfee())){
 							if(isPayTag(resp.getIface_tags(),productDto.getProd_id(),acct_id)){
-								logger.info("{} 正式用户,扣除计费条数:{}",prefix,acct_id);
+								logger.info("{} 正式用户产品,扣除计费条数:{}",prefix,acct_id);
 								acctEngine.updateTestProd(trade_id,acct_id, productDto.getProd_id());
 							}
 						}
