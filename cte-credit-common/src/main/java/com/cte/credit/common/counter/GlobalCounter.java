@@ -123,7 +123,8 @@ public class GlobalCounter {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public static boolean exists(String key, String value){
+	public static boolean exists(String key, String value) throws ServiceException{
+		init();
 		ShardedJedis jedis = pool.getResource();
 		try {
 			List list = jedis.lrange(key, 0L, -1L);
