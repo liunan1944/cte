@@ -39,4 +39,11 @@
 			<value>name,cardNo</value>
 		</property>
 	</bean>
+	<!-- 数据源序号：5  数据源名称：国政通工资水平数据源查询 -->
+	<bean name="ds_guozt_salary"
+		class="com.cte.credit.ds.client.salary.GuoZTSalaryRequestor">
+		<property name="paramIds">
+			<value>name,cardNo</value>
+		</property>
+	</bean>
 </beans>

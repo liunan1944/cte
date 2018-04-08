@@ -58,19 +58,6 @@ public class DataSourceService extends BaseDataSourceService implements IDataSou
 		boolean isConfiguredDS = false;
 		Object wacBean = null;
 		
-		if(isfuseOff(trade_id, ds,propertyEngine)){
-			final String forwardDsId = findABDs(propertyEngine.readById("ds_ab_watch"),ds.getId());
-			if(!forwardDsId.equalsIgnoreCase(ds.getId())){
-				logger.warn("{} 数据源重定向启动! 源数据源ID：{} 重定向后数据源ID：{}",prefix,ds.getId(),forwardDsId);
-				ds_id = forwardDsId;
-			}else{
-				rets.put(Conts.KEY_RET_STATUS, CRSStatusEnum.STATUS_FAILED_SYS_DS_EXCEPTION);
-				rets.put(Conts.KEY_RET_MSG, CRSStatusEnum.STATUS_FAILED_SYS_DS_EXCEPTION.getRet_msg());
-				rets.put(Conts.KEY_RET_TAG, new String[]{Conts.TAG_SYS_ERROR});
-				logger.warn("{} 熔断开关已启用,此次数据源请求被拒!{}", prefix, ds_id);
-				return rets;
-			}
-		}
 		//Step3: 数据源配置检查
 		try{
 			if (null == wac)
@@ -132,12 +119,12 @@ public class DataSourceService extends BaseDataSourceService implements IDataSou
 //		logger.info("{} 流量监控+1", prefix);
 //		
 //		//Step8: redis数据源熔断监控 
-		if(isErr(rets,propertyEngine)){
-			logger.warn("{} 数据源熔断收集器+1：{}", prefix, ds_id);
-			GlobalCounter.sign(ds_error_flag, 30000);
-			logger.info("{} 数据源熔断收集器当前统计数：{}", prefix,
-					GlobalCounter.getCount(ds_error_flag));
-		}
+//		if(isErr(rets)){
+//			logger.warn("{} 数据源熔断收集器+1：{}", prefix, ds_id);
+//			GlobalCounter.sign(ds_error_flag, 30000);
+//			logger.info("{} 数据源熔断收集器当前统计数：{}", prefix,
+//					GlobalCounter.getCount(ds_error_flag));
+//		}
 		if (doPrint) {
 			logger.info("{} 数据采集任务完毕,返回消息:{}", prefix, JSONObject.toJSONString(rets,true));
 		}

@@ -36,6 +36,19 @@ public enum CustomServiceEnum {
 			null,													 
 			null,
 			new String[] {},
+			null),
+	/**工资水平查询产品*/
+	SalaryQueryServiceImpl(
+			"CTE_009",                                                     
+			"工资水平查询产品",	   										    
+			0.0,															 
+			MethodType.synchronous,	
+			CustomType.nomal,
+			true,
+			new String[] { "name","cardNo"	},		
+			null,													 
+			null,
+			new String[] {},
 			null);
 
 	public String prod_code;			//产品ID
