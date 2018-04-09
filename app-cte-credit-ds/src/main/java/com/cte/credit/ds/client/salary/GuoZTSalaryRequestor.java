@@ -113,14 +113,14 @@ implements IDataSourceRequestor {
 			        salary.setCardno(enCardNo);
 			        if("200".equals(salary.getCode())){
 			        	logger.warn("{} 工资水平数据源交易成功", prefix);
-			        	resource_tag = Conts.TAG_TST_SUCCESS;
-			        	if("0".equals(salary.getData()) || "1".equals(salary.getData())){
-			        		retdata.put("data", "");
+			        	if("0".equals(salary.getData())){
 			        		retdata.put("is_inc", "F");
+			        		resource_tag = Conts.TAG_STATUS_UNFOUND;
 			        	}else{
-			        		retdata.put("data", salary.getData());
 			        		retdata.put("is_inc", "T");
+			        		resource_tag = Conts.TAG_TST_SUCCESS;
 			        	}
+			        	retdata.put("data", salary.getData());
 			        	rets.put(Conts.KEY_RET_TAG, resource_tag);
 						rets.put(Conts.KEY_RET_DATA, retdata);
 						rets.put(Conts.KEY_RET_STATUS, CRSStatusEnum.STATUS_SUCCESS);
