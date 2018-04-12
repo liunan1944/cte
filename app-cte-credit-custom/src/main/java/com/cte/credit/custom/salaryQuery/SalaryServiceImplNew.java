@@ -1,6 +1,7 @@
 package com.cte.credit.custom.salaryQuery;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -20,6 +21,7 @@ import com.cte.credit.common.template.PropertyUtil;
 import com.cte.credit.common.util.CardNoValidator;
 import com.cte.credit.common.util.ExceptionUtil;
 import com.cte.credit.common.util.StringUtil;
+import com.cte.credit.custom.salaryQuery.dao.iface.ISalaryDaoService;
 import com.cte.credit.custom.service.BaseCustomCoreService;
 import com.cte.credit.custom.service.iface.ICustomCoreService;
 
@@ -39,6 +41,8 @@ public class SalaryServiceImplNew extends BaseCustomCoreService
 	private final String ds_guozt_salary = "ds_guozt_salary";
 	@Autowired
 	PropertyUtil propertyEngine;
+	@Autowired
+	private ISalaryDaoService salaryService;
 	@Override
 	public CRSCoreResponse handler(String trade_id, CRSCoreRequest request) {
 		String prefix = trade_id + " " + Conts.KEY_CUSTOM_HEADER; // 流水号标识
@@ -60,8 +64,26 @@ public class SalaryServiceImplNew extends BaseCustomCoreService
 				return response;
 			}
 			logger.info("{} 开始请求薪资水平查询产品:{}", prefix,ds_guozt_salary);
-			
 			Map<String, Object> retdata = new TreeMap<String, Object>();
+			if(salaryService.findTestUser(request.getAcct_id(), request.getProdId())){
+				logger.info("{} 测试账号查询", prefix);
+				List<Map<String, Object>> list = salaryService.findSalary(name, cardNo);
+				if(list.size()>0){
+					Map<String, Object> map = list.get(0);
+					retdata.put("data", String.valueOf(map.get("DATA")));
+					retdata.put("is_inc", "T");
+				}else{
+					retdata.put("data", "0");
+					retdata.put("is_inc", "F");
+				}
+				response.setDs_tags(Conts.TAG_TST_SUCCESS);
+				response.setIface_tags(Conts.TAG_TST_SUCCESS);
+				response.setRetcode(Conts.KEY_STATUS_SUCCESS);
+				response.setRetdata(retdata);
+				response.setRetmsg("交易成功");
+				return response;
+			}
+			
 			Map<String,Object> params_in = new HashMap<String,Object>();
 			params_in.put("name", name);
 			params_in.put("cardNo", cardNo);
